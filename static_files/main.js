@@ -27,7 +27,7 @@ send_button_elm.addEventListener('click', function () {
   var user_input = input_textarea_elm.value;
   input_textarea_elm.value = '';
   input_textarea_elm.focus();
-  if(userNameCheck()) send_to_server(user_input);
+  if(userNameCheck() && inputCheck(user_input)) send_to_server(user_input);
 });
 
 var send_to_server = function (text_to_send) {
@@ -40,6 +40,14 @@ var data_from_server_callback = function (result) {
 };
 
 var username="";
+
+var inputCheck = function ( userInput ) {
+    if(userInput=="") {
+        alert("please type something.");
+        return false;
+    }
+    else return true;
+}
 
 var userNameCheck = function (){
     console.log("username: " + username);

@@ -17,6 +17,7 @@ textarea {
   padding-top: 50px;
   padding-left: 10%;
   width: 60%;
+  height: 100%;
   display: inline-block;
   vertical-align: top;
     
@@ -40,6 +41,7 @@ header {
 body {
     margin: auto;
     top: 0;
+    height: 500px;
 }
 
 header > span {
@@ -72,7 +74,7 @@ header > span {
 
 #log-area {
   width: 100%;
-    
+  height: 100%;  
 }
 
 .response-zone > span {
