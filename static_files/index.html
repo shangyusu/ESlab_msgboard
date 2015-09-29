@@ -5,32 +5,34 @@
     <title>Message Board</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="./main.css">
+    <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  
   </head>
+  <header>
+     <span>Message Board</span>
+  </header>  
   <body>
-
-    <h1>Message Board</h1>
-    <p>This web app is under construction.</p>
-
-    <div>
-      <div>
-        <h4>input your name</h1>
+    <div class="request-zone">
+      <div id="userLogin">
+        <span>Nickname: </span>
         <textarea name="your name" id="userName"></textarea>
-        <button id="user-name-set-btn">login</button> 
+        <button type="button" class="btn btn-default" id="user-name-set-btn">login</button> 
       </div>
-      <div class="request-zone">
-        <h2>Leave Message:</h2>
+      <!--div class="request-zone"-->
+      <div id="LeaveMessage"> 
+        <span>Leave Message: </span>
         <textarea id="user-input-area" autofocus></textarea>
-        <button id="user-input-send-btn">send</button>
-      </div>
-
-      <div class="response-zone">
-        <h2>Message Board:</h2>
-        <textarea readonly id="log-area"></textarea>
+        <button type="button" class="btn btn-default" id="user-input-send-btn">send</button>
       </div>
     </div>
-
-    <script src="main.js"></script>
-
+    <div class="response-zone">
+        <span>Message Board:</span>
+        <textarea readonly id="log-area"></textarea>
+    </div>
   </body>
+   <script src="main.js"></script>
 </html>

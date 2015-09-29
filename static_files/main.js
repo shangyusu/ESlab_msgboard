@@ -27,7 +27,7 @@ send_button_elm.addEventListener('click', function () {
   var user_input = input_textarea_elm.value;
   input_textarea_elm.value = '';
   input_textarea_elm.focus();
-  send_to_server(user_input);
+  if(userNameCheck()) send_to_server(user_input);
 });
 
 var send_to_server = function (text_to_send) {
@@ -41,7 +41,16 @@ var data_from_server_callback = function (result) {
 
 var username="";
 
+var userNameCheck = function (){
+    console.log("username: " + username);
+    if(/^[a-z0-9]{3,10}$/.test(username)){
+         console.log("valid name!");
+         return true;
+    }
+    else alert("Invalid user name!");
+}
+
 $('#user-name-set-btn').click(function(){
     username = $('#userName').val();
-    console.log(username);
+    console.log(userNameCheck());
 });
