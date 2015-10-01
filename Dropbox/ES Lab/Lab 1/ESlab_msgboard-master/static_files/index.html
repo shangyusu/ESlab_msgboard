@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Message Board</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="./main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <h1>Message Board</h1>
+    <p>This web app is under construction.</p>
+
+    <div>
+        
+      <div>
+        <h4>input your name</h1>
+        <textarea name="your name" id="userName"></textarea>
+        <button id="user-name-set-btn">login</button> 
+      </div>
+        
+      <form>
+      please select your emoji<br>
+      <input type="radio" name="userEmoji" value="0"> 爽<br>
+      <input type="radio" name="userEmoji" value="1"> 普普<br> 
+      <input type="radio" name="userEmoji" value="2"> 差<br>
+      </form>
+ 
+        
+      <div class="request-zone">
+        <h2>Leave Message:</h2>
+        <textarea id="user-input-area" autofocus></textarea>
+        <button id="user-input-send-btn">send</button>
+      </div>
+      <div class="response-zone">
+        <h2>Message Board:</h2>
+        <textarea readonly id="log-area"></textarea>
+      </div>
+    
+        
+    </div>
+
+    <script src="main.js"></script>
+
+  </body>
+</html>
