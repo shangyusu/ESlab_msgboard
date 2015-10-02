@@ -43,7 +43,7 @@ var do_respond_to_an_HTTP_request = function (req, res) {
   var requrl = req.url;
   var reqheaders = req.headers;
   var reqbody = new Buffer(0);
-
+  
   req.on('data', function (chunk) {
     assert(chunk instanceof Buffer);
     reqbody = Buffer.concat([reqbody, chunk]);
@@ -52,6 +52,7 @@ var do_respond_to_an_HTTP_request = function (req, res) {
   req.on('end', function () {
 
     var pattern = reqmethod + ' ' + requrl;
+    
     var responder = function (respbody, respheaders) {
       assert(respbody instanceof Buffer);
       assert(!respheaders || typeof respheaders === 'object');

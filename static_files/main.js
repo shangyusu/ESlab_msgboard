@@ -7,9 +7,12 @@ var http_post = function (where, text_to_send, callback) {
   
   fetch(where, {method: 'POST', body: text_to_send})
     .then(function (response) {
+    console.log(text_to_send);
+      //console.log('data here');
       return response.text();
     })
     .then(function (server_response_text) {
+      //console.log(server_response_text);
       callback(server_response_text);
     })
     .catch(function (err) {
@@ -21,7 +24,7 @@ var timestamp_str = function () {
   var ensure_two_digits = function (num) {
     return (num < 10) ? '0' + num : '' + num; };
   var date   = new Date();
-  console.log(date/1000);  //seconds since epoch
+  //console.log(date/1000);  //seconds since epoch
   var year   = date.getFullYear();
   var month  = ensure_two_digits(date.getMonth() + 1);
   var day    = ensure_two_digits(date.getDate());
@@ -61,5 +64,5 @@ $('#user-name-set-btn').click(function(){
     console.log(username);
 });
 
-
+//var myRequest = new Request('test');
 //var useremoji="";

@@ -9,6 +9,8 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('GET /main.js', do_output_js);
   set_handler('GET /favicon.ico', do_output_favicon);
   set_handler('POST /echo', do_echo);
+  set_handler('POST /submit', do_submit);
+  set_handler('POST /read_all', do_read_all);
 };
 
 var do_output_html = function (send_response) {
@@ -43,7 +45,39 @@ var do_output_favicon = function (send_response) {
 var do_echo = function (send_response, request_body, request_headers) {
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
+  //save_data(request_body.text);
+  console.log(request_body);
   send_response(request_body, {'Content-Type': content_type});
+};
+
+var do_submit = function(){
+
+
+};
+
+var do_read_all = function(){
+
+};
+
+var save_data = function(_nickname){         
+
+            //var newMsg={"nickname":_nickname, "emoji":_emoji, "message":_message};
+            var newMsg=_nickname.value;
+            //把data 存回去
+            $.ajax({  
+                url: "addData.php",  
+                type: "POST",
+                data: { msg : newMsg },
+                success: function(data){
+                    if ( data == '1'){
+                        alert('哎呀，好像有什麼東西出錯啦，請稍後再試。');
+                    } else {
+                        // do something if success 
+                    }
+                    //$('#giftname').val(''); //清空input
+                } 
+            });  
+        
 };
 
 httpserver.run(configs);
