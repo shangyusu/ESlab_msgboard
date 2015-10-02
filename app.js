@@ -45,23 +45,31 @@ var do_output_favicon = function (send_response) {
 var do_echo = function (send_response, request_body, request_headers) {
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
-  //save_data(request_body.text);
-  console.log(request_body);
+  var StringDecoder = require('string_decoder').StringDecoder;
+  var myDecoder = new StringDecoder('utf8');
+  //console.log(myDecoder.write(request_body));
+  //console.log(request_body instanceof Buffer);
   send_response(request_body, {'Content-Type': content_type});
 };
 
-var do_submit = function(){
-
-
+var do_submit = function (send_response, request_body, request_headers) {
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  var StringDecoder = require('string_decoder').StringDecoder;
+  var myDecoder = new StringDecoder('utf8');
+  console.log(myDecoder.write(request_body));
+  //console.log(request_body instanceof Buffer);
+  //send_response(request_body, {'Content-Type': content_type});
 };
+
 
 var do_read_all = function(){
 
 };
 
 var save_data = function(_nickname){         
-
             //var newMsg={"nickname":_nickname, "emoji":_emoji, "message":_message};
+            
             var newMsg=_nickname.value;
             //把data 存回去
             $.ajax({  
@@ -74,7 +82,7 @@ var save_data = function(_nickname){
                     } else {
                         // do something if success 
                     }
-                    //$('#giftname').val(''); //清空input
+                    
                 } 
             });  
         

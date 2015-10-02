@@ -7,8 +7,6 @@ var http_post = function (where, text_to_send, callback) {
   
   fetch(where, {method: 'POST', body: text_to_send})
     .then(function (response) {
-    console.log(text_to_send);
-      //console.log('data here');
       return response.text();
     })
     .then(function (server_response_text) {
