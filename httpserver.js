@@ -62,6 +62,7 @@ var do_respond_to_an_HTTP_request = function (req, res) {
       if (respheaders)
         for (var header_name of Object.keys(respheaders))
           res.setHeader(header_name, respheaders[header_name]);
+      //console.log(respbody);
       res.write(respbody);
       res.end();
     };

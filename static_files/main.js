@@ -2,9 +2,9 @@ console.log('Hello JavaScript!');
 
 var http_post = function (where, text_to_send, callback) {
   if (typeof where !== 'string') throw TypeError();
-  if (typeof text_to_send !== 'string') throw TypeError();
+  if (typeof text_to_send !== 'object') throw TypeError();
   if (typeof callback !== 'function') throw TypeError();
-  
+  console.log(text_to_send);
   fetch(where, {method: 'POST', body: text_to_send})
     .then(function (response) {
       return response.text();
@@ -42,13 +42,14 @@ send_button_elm.addEventListener('click', function () {
   if (user_input.length!=0){
     input_textarea_elm.value = '';
     input_textarea_elm.focus();
-    send_to_server(user_input);
+    var _sendJSON= {"nickname":username,"emoji":1,"message":user_input};
+    send_to_server(_sendJSON);
   }
   else  alert("Error! Message is empty!");
 });
 
 var send_to_server = function (text_to_send) {
-  if (typeof text_to_send !== 'string') throw TypeError();
+  if (typeof text_to_send !== 'object') throw TypeError();
   http_post('/echo', text_to_send, data_from_server_callback);
 };
 
