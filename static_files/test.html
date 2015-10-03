@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Message Board</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="./test.css">
     <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!--bootstrap-->
@@ -15,6 +15,10 @@
     <script src="//cdn.muicss.com/mui-0.1.23/js/mui.min.js"></script>
     <!-- Angular Material CSS now available via Google CDN; version 0.10 used here -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
+    
+    <!--font-->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:200">
+
   </head>
    
   <header>
@@ -24,14 +28,22 @@
   <body ng-app="msgBoard">
     <div ng-controller="inputCtrl" class="request-zone">
       <div id="userLogin">
-        <span>Nickname: </span>
-        <textarea name="your name" id="userName"></textarea>
+       
+        <md-input-container flex>
+          <label>Your name</label>
+          <input ng-model="user.firstName" ng-required="true"  md-maxlength="10"  md-minlength="3">
+        </md-input-container>
+        
         <button type="button" class="btn btn-default" id="user-name-set-btn">login</button> 
       </div>
       <!--div class="request-zone"-->
       <div id="LeaveMessage"> 
-        <span>Leave Message: </span>
-        <textarea id="user-input-area" autofocus></textarea>
+       
+         <md-input-container flex>
+        <label>Message</label>
+        <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
+      </md-input-container>
+       
         <button type="button" class="btn btn-default" id="user-input-send-btn">send</button>
       </div>
     </div>
