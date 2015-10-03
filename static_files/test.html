@@ -21,8 +21,8 @@
      <span>Message Board</span>
   </header>
       
-  <body>
-    <div class="request-zone">
+  <body ng-app="msgBoard">
+    <div ng-controller="inputCtrl" class="request-zone">
       <div id="userLogin">
         <span>Nickname: </span>
         <textarea name="your name" id="userName"></textarea>
@@ -48,5 +48,5 @@
     <!-- Angular Material Javascript now available via Google CDN; version 0.10 used here -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
     
-    <script src="main.js"></script>
+    <script src="test.js"></script>
 </html>
