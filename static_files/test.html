@@ -21,36 +21,38 @@
 
   </head>
    
-  <header>
-     <span>Message Board</span>
-  </header>
       
   <body ng-app="msgBoard">
+  <md-content>
+   <header>
+     <span>Message Board</span>
+     <!--h1>Message Board</h1-->
+   </header>
+   <div id="container">
     <div ng-controller="inputCtrl" class="request-zone">
       <div id="userLogin">
        
         <md-input-container flex>
           <label>Your name</label>
-          <input ng-model="user.firstName" ng-required="true"  md-maxlength="10"  md-minlength="3">
+          <input ng-model="user.firstName" ng-required="true"  md-maxlength="10">
         </md-input-container>
-        
-        <button type="button" class="btn btn-default" id="user-name-set-btn">login</button> 
+        <md-button id="user-name-set-btn">login</md-button>
       </div>
       <!--div class="request-zone"-->
-      <div id="LeaveMessage"> 
-       
-         <md-input-container flex>
+      <div id="LeaveMessage">       
+      <md-input-container flex>
         <label>Message</label>
-        <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
+        <textarea id="msgArea" ng-model="user.biography" md-maxlength="150"></textarea>
       </md-input-container>
-       
-        <button type="button" class="btn btn-default" id="user-input-send-btn">send</button>
+       <md-button id="user-input-send-btn">send</md-button>
       </div>
     </div>
     <div class="response-zone">
-        <span>Message Board:</span>
+        <!--span>Message Board:</span-->
         <textarea readonly id="log-area"></textarea>
     </div>
+    </div>
+    </md-content>
   </body>
    
     <!-- Angular Material Dependencies -->

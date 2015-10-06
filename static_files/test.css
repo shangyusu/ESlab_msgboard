@@ -13,14 +13,14 @@ textarea {
 .request-zone{
   display: inline-block;
   vertical-align: top;
-  padding-top: 70px;
-  width: 30%;
+  padding-top: 10%;
+  width: 35%;
 }
 
 
 .response-zone {
-  padding-top: 50px;
-  padding-left: 10%;
+  padding-top: 10%;
+  padding-left: 20px;
   width: 60%;
   height: 100%;
   display: inline-block;
@@ -34,13 +34,17 @@ textarea {
   display: inline;
 }
 header {
-    width: 100%;
-    height: 50px;
-    line-height: 50px;
-    background-color: #0099FF;
+    width: 70%;
+    height: 120px;
+    margin-left: 10%;
+    margin-right: 10%;
+    line-height: 120px;
+    text-align: center;
     top: 0;
-    position: fixed;
     z-index: 1000;
+    display: block;
+    border-bottom: 1px solid;
+    border-bottom-color: #EDEDED;        
 }
 
 body {
@@ -50,10 +54,9 @@ body {
 }
 
 header > span {
-    font-size: 30px;
+    font-size: 55px;
     vertical-align: middle;
     line-height: normal; 
-    color: aliceblue;
     margin-left: 5px;
 }
 
@@ -63,7 +66,7 @@ header > span {
 }
 
 #user-name-set-btn {
-    display: block;
+    display: inline-block;
 }
 
 #userLogin > span {
@@ -96,4 +99,14 @@ header > span {
 
 #LeaveMessage > span {
     display: block;
+}
+
+#msgArea {
+    width: inherit;
+    height: inherit;
+}
+
+#container {
+    width: 70%;
+    margin: auto;
 }
