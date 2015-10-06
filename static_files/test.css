@@ -67,6 +67,8 @@ header > span {
 
 #user-name-set-btn {
     display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
 }
 
 #userLogin > span {
@@ -94,7 +96,8 @@ header > span {
 
 #user-input-send-btn {
     display: block;
-    margin-top: 4px;
+    margin-top: 0px;
+    margin-left: 0px;
 }
 
 #LeaveMessage > span {
@@ -109,4 +112,12 @@ header > span {
 #container {
     width: 70%;
     margin: auto;
+}
+
+#nameContainer {
+    padding-bottom: 20px;
+}
+
+#msgContainer {
+    padding-bottom: 20px;
 }

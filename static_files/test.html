@@ -32,7 +32,7 @@
     <div ng-controller="inputCtrl" class="request-zone">
       <div id="userLogin">
        
-        <md-input-container flex>
+        <md-input-container id="nameContainer" flex>
           <label>Your name</label>
           <input id="userName" ng-model="user.firstName" ng-required="true"  md-maxlength="10">
         </md-input-container>
@@ -40,9 +40,9 @@
       </div>
       <!--div class="request-zone"-->
       <div id="LeaveMessage">       
-      <md-input-container flex>
+      <md-input-container id="msgContainer" flex>
         <label>Message</label>
-        <textarea id="user-input-area" ng-model="user.biography" md-maxlength="150"></textarea>
+        <textarea ng-required="true" id="user-input-area" ng-model="user.biography" md-maxlength="150"></textarea>
       </md-input-container>
        <md-button id="user-input-send-btn">send</md-button>
       </div>
