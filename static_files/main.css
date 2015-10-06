@@ -1,3 +1,7 @@
+*{
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+}
 
 textarea {
   width: 250px;
@@ -9,16 +13,16 @@ textarea {
 .request-zone{
   display: inline-block;
   vertical-align: top;
-  padding-top: 70px;
-  width: 30%;
+  padding-top: 10%;
+  width: 35%;
 }
 
 
 .response-zone {
-  padding-top: 50px;
-  padding-left: 10%;
+  padding-top: 10%;
+  padding-left: 20px;
   width: 60%;
-  height: 100%;
+  height: 400px;
   display: inline-block;
   vertical-align: top;
     
@@ -30,15 +34,17 @@ textarea {
   display: inline;
 }
 header {
-    width: 100%;
-    height: 150px;
-    line-height: 150px;
-    background-color: #0099FF;
+    width: 70%;
+    height: 120px;
+    margin-left: 10%;
+    margin-right: 10%;
+    line-height: 120px;
+    text-align: center;
     top: 0;
-    position: fixed;
-    display: block;
     z-index: 1000;
-    
+    display: block;
+    border-bottom: 1px solid;
+    border-bottom-color: #EDEDED;        
 }
 
 body {
@@ -48,10 +54,9 @@ body {
 }
 
 header > span {
-    font-size: 30px;
+    font-size: 55px;
     vertical-align: middle;
     line-height: normal; 
-    color: aliceblue;
     margin-left: 5px;
 }
 
@@ -61,14 +66,16 @@ header > span {
 }
 
 #user-name-set-btn {
-    display: block;
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
 }
 
 #userLogin > span {
     display: block;
 }
 
-#LeaveMessage  {
+#LeaveMessage {
  
 }
 
@@ -88,10 +95,29 @@ header > span {
 }
 
 #user-input-send-btn {
-    display: inline-block;
-    margin-top: 4px;
+    display: block;
+    margin-top: 0px;
+    margin-left: 0px;
 }
 
 #LeaveMessage > span {
     display: block;
+}
+
+#msgArea {
+    width: inherit;
+    height: inherit;
+}
+
+#container {
+    width: 70%;
+    margin: auto;
+}
+
+#nameContainer {
+    padding-bottom: 20px;
+}
+
+#msgContainer {
+    padding-bottom: 20px;
 }
