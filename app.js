@@ -97,8 +97,10 @@ var do_submit = function (send_response, request_body, request_headers) {
 };
 
 
-var do_read_all = function(){
-
+var do_read_all = function(send_response, request_body, request_headers){
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(new Buffer(JSON.stringify(DataBase)), {'Content-Type': content_type});
 };
 
 var Buffer_to_JSON = function(_buffer)
