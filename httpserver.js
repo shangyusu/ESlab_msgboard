@@ -65,30 +65,12 @@ var do_respond_to_an_HTTP_request = function (req, res) {
       res.write(respbody);
       res.end();
     };
-    var responder_echo = function (respbody, respheaders) {
-      assert(respbody instanceof Buffer);
-      assert(!respheaders || typeof respheaders === 'object');
-      if (respheaders)
-        for (var header_name of Object.keys(respheaders))
-          res.setHeader(header_name, respheaders[header_name]);
-      var StringDecoder = require('string_decoder').StringDecoder;
-      var myDecoder = new StringDecoder('utf8');
-      //var _Jstring = myDecoder.write(respbody);
-      //console.log(myDecoder.write(respbody));
-      res.write(respbody);
-      //res.write(new Buffer('text',"utf8"));
-      res.end();
-    };
     console.log(req.connection.remoteAddress + ' ' + timestamp_str() +
                 ' >>>> "' + pattern + '"');
     if (typeof reqhandlers[pattern] === 'function')
     {
-      //if (pattern=='POST /echo')
-      //  reqhandlers[pattern](responder_echo, reqbody, reqheaders);
-      //else
-        reqhandlers[pattern](responder, reqbody, reqheaders);
+      reqhandlers[pattern](responder, reqbody, reqheaders);
     }
-      
     else {
       res.statusCode = 400;
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');
