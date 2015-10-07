@@ -43,34 +43,56 @@ var do_output_favicon = function (send_response) {
 
 // Echo back every bytes received from the client
 var do_echo = function (send_response, request_body, request_headers) {
-  var StringDecoder = require('string_decoder').StringDecoder;
-  var myDecoder = new StringDecoder('utf8');    
-  var _Jstring = myDecoder.write(request_body);
-  var _Jobj = JSON.parse(_Jstring);
+  var _Jobj = Buffer_to_JSON(request_body);
   //var _RetJobj = JSON.parse(_Jstring);
   var date = new Date();
   _Jobj.time_stp = (date)/1000;
-  var fs = require('fs');
-  fs.appendFile('data.db',new Buffer(JSON.stringify(_Jobj)),function(err){
-    if (err) throw err;
-    console.log('append success!');
-  });
-  var _RetJobj = JSON.parse(_Jstring);
+  save_data(_Jobj);
+  var _RetJobj = Buffer_to_JSON(request_body);
   _RetJobj.time_stp = timestamp_str(date);
   var _RetJstring = JSON.stringify(_RetJobj);
   request_body = new Buffer(_RetJstring);
-  var content_type_default = 'application/octet-stream';
+  var content_tBuffer_to_JSONype_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
 };
 
 var do_submit = function (send_response, request_body, request_headers) {
+  var _success  = true;
+  var _nicError = false;
+  var _msgError = false;
+  var _Jobj = Buffer_to_JSON(request_body);
+  var date = new Date();
+  _Jobj.time_stp = (date)/1000;
+  if (_Jobj.nickname.length==0)
+  {
+    _success  = false;
+    _nicError = true;
+  }
+  if (_Jobj.message.length==0)
+  {
+    _success  = false;
+    _msgError = true;
+  }
+  var _ret;
+  if (_success)
+  {
+    _ret={ok:true}
+    save_data(_Jobj);
+  }
+  else
+  {
+    var _reason = "";
+    if (_nicError)  _reason += " you must provide a valid nickname. ";
+    if (_msgError)  _reason += " you must provide a valid message. ";
+    _ret={
+      ok:false,
+      reason:_reason
+    }
+  }
+  request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
-  //var StringDecoder = require('string_decoder').StringDecoder;
-  //var myDecoder = new StringDecoder('utf8');
-  //console.log(myDecoder.write(request_body));
-  //console.log(request_body instanceof Buffer);
   send_response(request_body, {'Content-Type': content_type});
 };
 
@@ -79,25 +101,21 @@ var do_read_all = function(){
 
 };
 
-var save_data = function(_nickname){         
-            //var newMsg={"nickname":_nickname, "emoji":_emoji, "message":_message};
-            
-            var newMsg=_nickname.value;
-            //把data 存回去
-            $.ajax({  
-                url: "addData.php",  
-                type: "POST",
-                data: { msg : newMsg },
-                success: function(data){
-                    if ( data == '1'){
-                        alert('哎呀，好像有什麼東西出錯啦，請稍後再試。');
-                    } else {
-                        // do something if success 
-                    }
-                    
-                } 
-            });  
-        
+var Buffer_to_JSON = function(_buffer)
+{
+  var StringDecoder = require('string_decoder').StringDecoder;
+  var myDecoder = new StringDecoder('utf8');    
+  var _Jstring = myDecoder.write(_buffer);
+  return JSON.parse(_Jstring);
+};
+
+var save_data = function(_obj)
+{
+  var fs = require('fs');
+  fs.appendFile('data.db',new Buffer(JSON.stringify(_obj)),function(err){
+    if (err) throw err;
+    console.log('append success!');
+  });
 };
 
 var timestamp_str = function (date) {
