@@ -2,10 +2,12 @@ console.log('Hello JavaScript!');
 
 var http_post = function (where, text_to_send, callback) {
   if (typeof where !== 'string') throw TypeError();
-  if (typeof text_to_send !== 'object') throw TypeError();
+  if (typeof text_to_send !== 'string') throw TypeError();
   if (typeof callback !== 'function') throw TypeError();
-  console.log(text_to_send);
-  fetch(where, {method: 'POST', body: text_to_send})
+  fetch(where, {
+      method: 'POST',
+      body: text_to_send
+    })
     .then(function (response) {
       return response.text();
     })
@@ -16,6 +18,8 @@ var http_post = function (where, text_to_send, callback) {
     .catch(function (err) {
       callback(null, err);
     });
+
+  
 };
 
 var timestamp_str = function () {
@@ -42,22 +46,32 @@ send_button_elm.addEventListener('click', function () {
   if (user_input.length!=0){
     input_textarea_elm.value = '';
     input_textarea_elm.focus();
-    var _sendJSON= {"nickname":username,"emoji":1,"message":user_input};
-    send_to_server(_sendJSON);
+    //var _sendJSON= {"nickname":username,"emoji":1,"message":user_input};
+    send_to_server(user_input);
   }
   else  alert("Error! Message is empty!");
 });
 
 var send_to_server = function (text_to_send) {
-  if (typeof text_to_send !== 'object') throw TypeError();
-  http_post('/echo', text_to_send, data_from_server_callback);
+  if (typeof text_to_send !== 'string') throw TypeError();
+  var _json = {
+    nickname:username,
+    emoji:1,
+    message:text_to_send,
+    time_stp:"",
+  }
+  http_post('/echo', JSON.stringify(_json), data_from_server_callback);
 };
 
 var data_from_server_callback = function (result) {
-  log_textarea_elm.value += timestamp_str() +'  '+ username + ': [' + result + ']\n' ;
+  //log_textarea_elm.value += timestamp_str() +'  '+ username + ': [' + result + ']\n' ;
+  var _JSON_obj = JSON.parse(result);
+  //console.log(_JSON_obj);
+  log_textarea_elm.value += _JSON_obj.time_stp + ' ' +_JSON_obj.nickname + ' : ' + _JSON_obj.message + '\n';
 };
 
 var username="";
+
 $('#user-name-set-btn').click(function(){
     username = $('#userName').val();
     console.log(username);

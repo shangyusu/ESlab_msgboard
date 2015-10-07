@@ -13,12 +13,13 @@ var timestamp_str = function () {
   var ensure_two_digits = function (num) {
     return (num < 10) ? '0' + num : '' + num; };
   var date   = new Date();
+  var year   = date.getFullYear();
   var month  = ensure_two_digits(date.getMonth() + 1);
   var day    = ensure_two_digits(date.getDate());
   var hour   = ensure_two_digits(date.getHours());
   var minute = ensure_two_digits(date.getMinutes());
   var second = ensure_two_digits(date.getSeconds());
-  return month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+  return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
 };
 
 var port_setter = function (iport) {
@@ -43,10 +44,9 @@ var do_respond_to_an_HTTP_request = function (req, res) {
   var requrl = req.url;
   var reqheaders = req.headers;
   var reqbody = new Buffer(0);
-  
   req.on('data', function (chunk) {
-    var StringDecoder = require('string_decoder').StringDecoder;
-    var myDecoder = new StringDecoder('utf8');
+    //var StringDecoder = require('string_decoder').StringDecoder;
+    //var myDecoder = new StringDecoder('utf8');
     //console.log(myDecoder.write(chunk));
     assert(chunk instanceof Buffer);
     reqbody = Buffer.concat([reqbody, chunk]);
@@ -62,14 +62,33 @@ var do_respond_to_an_HTTP_request = function (req, res) {
       if (respheaders)
         for (var header_name of Object.keys(respheaders))
           res.setHeader(header_name, respheaders[header_name]);
-      //console.log(respbody);
       res.write(respbody);
+      res.end();
+    };
+    var responder_echo = function (respbody, respheaders) {
+      assert(respbody instanceof Buffer);
+      assert(!respheaders || typeof respheaders === 'object');
+      if (respheaders)
+        for (var header_name of Object.keys(respheaders))
+          res.setHeader(header_name, respheaders[header_name]);
+      var StringDecoder = require('string_decoder').StringDecoder;
+      var myDecoder = new StringDecoder('utf8');
+      //var _Jstring = myDecoder.write(respbody);
+      //console.log(myDecoder.write(respbody));
+      res.write(respbody);
+      //res.write(new Buffer('text',"utf8"));
       res.end();
     };
     console.log(req.connection.remoteAddress + ' ' + timestamp_str() +
                 ' >>>> "' + pattern + '"');
     if (typeof reqhandlers[pattern] === 'function')
-      reqhandlers[pattern](responder, reqbody, reqheaders);
+    {
+      //if (pattern=='POST /echo')
+      //  reqhandlers[pattern](responder_echo, reqbody, reqheaders);
+      //else
+        reqhandlers[pattern](responder, reqbody, reqheaders);
+    }
+      
     else {
       res.statusCode = 400;
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');

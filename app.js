@@ -43,23 +43,35 @@ var do_output_favicon = function (send_response) {
 
 // Echo back every bytes received from the client
 var do_echo = function (send_response, request_body, request_headers) {
+  var StringDecoder = require('string_decoder').StringDecoder;
+  var myDecoder = new StringDecoder('utf8');    
+  var _Jstring = myDecoder.write(request_body);
+  var _Jobj = JSON.parse(_Jstring);
+  //var _RetJobj = JSON.parse(_Jstring);
+  var date = new Date();
+  _Jobj.time_stp = (date)/1000;
+  var fs = require('fs');
+  fs.appendFile('data.db',new Buffer(JSON.stringify(_Jobj)),function(err){
+    if (err) throw err;
+    console.log('append success!');
+  });
+  var _RetJobj = JSON.parse(_Jstring);
+  _RetJobj.time_stp = timestamp_str(date);
+  var _RetJstring = JSON.stringify(_RetJobj);
+  request_body = new Buffer(_RetJstring);
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
-  var StringDecoder = require('string_decoder').StringDecoder;
-  var myDecoder = new StringDecoder('utf8');
-  //console.log(myDecoder.write(request_body));
-  //console.log(request_body instanceof Buffer);
   send_response(request_body, {'Content-Type': content_type});
 };
 
 var do_submit = function (send_response, request_body, request_headers) {
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
-  var StringDecoder = require('string_decoder').StringDecoder;
-  var myDecoder = new StringDecoder('utf8');
-  console.log(myDecoder.write(request_body));
+  //var StringDecoder = require('string_decoder').StringDecoder;
+  //var myDecoder = new StringDecoder('utf8');
+  //console.log(myDecoder.write(request_body));
   //console.log(request_body instanceof Buffer);
-  //send_response(request_body, {'Content-Type': content_type});
+  send_response(request_body, {'Content-Type': content_type});
 };
 
 
@@ -86,6 +98,19 @@ var save_data = function(_nickname){
                 } 
             });  
         
+};
+
+var timestamp_str = function (date) {
+  var ensure_two_digits = function (num) {
+    return (num < 10) ? '0' + num : '' + num; };
+  //var date   = new Date();
+  var year   = date.getFullYear();
+  var month  = ensure_two_digits(date.getMonth() + 1);
+  var day    = ensure_two_digits(date.getDate());
+  var hour   = ensure_two_digits(date.getHours());
+  var minute = ensure_two_digits(date.getMinutes());
+  var second = ensure_two_digits(date.getSeconds());
+  return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
 };
 
 httpserver.run(configs);
