@@ -46,13 +46,13 @@ var do_echo = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
   //var _RetJobj = JSON.parse(_Jstring);
   var date = new Date();
-  _Jobj.time_stp = (date)/1000;
+  _Jobj.time_stp = (date)/1000; 
   save_data(_Jobj);
   var _RetJobj = Buffer_to_JSON(request_body);
   _RetJobj.time_stp = timestamp_str(date);
   var _RetJstring = JSON.stringify(_RetJobj);
   request_body = new Buffer(_RetJstring);
-  var content_tBuffer_to_JSONype_default = 'application/octet-stream';
+  var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
 };
@@ -109,10 +109,27 @@ var Buffer_to_JSON = function(_buffer)
   return JSON.parse(_Jstring);
 };
 
+
+var fs = require('fs');
+
+var DataBase;
+function read_data(callback)
+{
+  fs.readFile('data.db', function (err, data) {
+        if (err) return callback(err);
+        callback(null, data);
+    })
+}
+read_data(function(err, data){
+  DataBase = Buffer_to_JSON(data);
+  //console.log(DataBase.length);
+});
+
+
 var save_data = function(_obj)
 {
-  var fs = require('fs');
-  fs.appendFile('data.db',new Buffer(JSON.stringify(_obj)),function(err){
+  DataBase[DataBase.length] = _obj;
+  fs.writeFile('data.db',new Buffer(JSON.stringify(DataBase)),function(err){
     if (err) throw err;
     console.log('append success!');
   });
