@@ -11,6 +11,8 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('POST /echo', do_echo);
   set_handler('POST /submit', do_submit);
   set_handler('POST /read_all', do_read_all);
+  //這裡我增加兩個handler，針對read_all submit
+  //這樣從terminal 送出這兩種request 我們才有辦法有相對的response
 };
 
 var do_output_html = function (send_response) {
@@ -42,25 +44,36 @@ var do_output_favicon = function (send_response) {
 };
 
 // Echo back every bytes received from the client
+// 這邊送進do_echo的request_body是一個buffer，buffer的內容是剛剛被stringify的JSON物件
+// 使用Buffer_to_JSON這個我自己寫的function把buffer變成JSON的物件
+// 這個剛送進來的物件本身的timestamp是一個空stirng，所以要把正確的timestamp加上去
+// save_data timestamp_str 也是function，下面有說明
+// 再把已經附上timestamp的JSON物件stringify後轉成buffer送給responder
+// (這裡的send_response就是httpserver.js裏面的responder，trace一下code就可以明白)
 var do_echo = function (send_response, request_body, request_headers) {
+  
   var _Jobj = Buffer_to_JSON(request_body);
-  //var _RetJobj = JSON.parse(_Jstring);
   var date = new Date();
   _Jobj.time_stp = (date)/1000; 
   save_data(_Jobj);
+  // 因為要儲存data.db的timestamp格式和要再網頁上看到的格式不同，所以會有兩種obj
+  // 不過我在想之後如果要能夠從data.db資料庫更新的話應該是要直接送unix time(in second)到前端再轉換會比較方便
   var _RetJobj = Buffer_to_JSON(request_body);
   _RetJobj.time_stp = timestamp_str(date);
   var _RetJstring = JSON.stringify(_RetJobj);
   request_body = new Buffer(_RetJstring);
+  
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
 };
 
+
+//這是針對submit這個request的function
 var do_submit = function (send_response, request_body, request_headers) {
-  var _success  = true;
-  var _nicError = false;
-  var _msgError = false;
+  var _success  = true;   //有沒有成功
+  var _nicError = false;  //mickname有沒有error
+  var _msgError = false;  //message有沒有error
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
   _Jobj.time_stp = (date)/1000;
@@ -96,7 +109,7 @@ var do_submit = function (send_response, request_body, request_headers) {
   send_response(request_body, {'Content-Type': content_type});
 };
 
-
+//直接把data.db的東西全部送出去
 var do_read_all = function(send_response, request_body, request_headers){
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
@@ -114,7 +127,7 @@ var Buffer_to_JSON = function(_buffer)
 
 var fs = require('fs');
 
-var DataBase;
+var DataBase;  //用來存data.db的資料
 function read_data(callback)
 {
   fs.readFile('data.db', function (err, data) {
@@ -126,7 +139,7 @@ read_data(function(err, data){
   DataBase = Buffer_to_JSON(data);
   //console.log(DataBase.length);
 });
-
+//上面這個function就是把資料讀出來
 
 var save_data = function(_obj)
 {
@@ -137,6 +150,7 @@ var save_data = function(_obj)
   });
 };
 
+// 將data的物件轉換成 yyyy/mm/dd hh:mm:ss 的string
 var timestamp_str = function (date) {
   var ensure_two_digits = function (num) {
     return (num < 10) ? '0' + num : '' + num; };

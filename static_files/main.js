@@ -12,14 +12,12 @@ var http_post = function (where, text_to_send, callback) {
       return response.text();
     })
     .then(function (server_response_text) {
-      //console.log(server_response_text);
       callback(server_response_text);
     })
     .catch(function (err) {
       callback(null, err);
     });
-
-  
+  //這邊我簡單說明一下fetch的功能，fetch基本上就是送出一個request，他的method body url等都是可以設定的參數
 };
 
 var timestamp_str = function () {
@@ -46,7 +44,6 @@ send_button_elm.addEventListener('click', function () {
   if (user_input.length!=0){
     input_textarea_elm.value = '';
     input_textarea_elm.focus();
-    //var _sendJSON= {"nickname":username,"emoji":1,"message":user_input};
     send_to_server(user_input);
   }
   else  alert("Error! Message is empty!");
@@ -60,6 +57,8 @@ var send_to_server = function (text_to_send) {
     message:text_to_send,
     time_stp:"",
   }
+  //建立一個JSON物件，之後在用JSON的stringify功能把他轉成string，傳入http_post
+  //http_post我沒有做變更，下一個變更再app.js裡面
   http_post('/echo', JSON.stringify(_json), data_from_server_callback);
 };
 

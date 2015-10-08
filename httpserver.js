@@ -45,9 +45,6 @@ var do_respond_to_an_HTTP_request = function (req, res) {
   var reqheaders = req.headers;
   var reqbody = new Buffer(0);
   req.on('data', function (chunk) {
-    //var StringDecoder = require('string_decoder').StringDecoder;
-    //var myDecoder = new StringDecoder('utf8');
-    //console.log(myDecoder.write(chunk));
     assert(chunk instanceof Buffer);
     reqbody = Buffer.concat([reqbody, chunk]);
   });
