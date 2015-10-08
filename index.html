@@ -4,12 +4,9 @@
     <meta charset="utf-8">
     <title>Message Board</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="./test.css">
+    <link rel="stylesheet" href="./main.css">
     <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!--bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <!-- Angular Material CSS now available via Google CDN; version 0.10 used here -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
@@ -29,20 +26,28 @@
    <div id="container">
     <div ng-controller="inputCtrl" class="request-zone">
       <div id="userLogin">
-       
         <md-input-container id="nameContainer" flex>
           <label>Your name</label>
-          <input id="userName" ng-model="user.firstName" ng-required="true"  md-maxlength="10">
+          <input id="userName" ng-model="name" ng-required="true"  md-maxlength="10">
         </md-input-container>
         <md-button id="user-name-set-btn">login</md-button>
       </div>
       <!--div class="request-zone"-->
       <div id="LeaveMessage">       
-      <md-input-container id="msgContainer" flex>
-        <label>Message</label>
-        <textarea ng-required="true" id="user-input-area" ng-model="user.biography" md-maxlength="150"></textarea>
-      </md-input-container>
-       <md-button id="user-input-send-btn">send</md-button>
+          <md-input-container id="msgContainer" flex>
+            <label>Message</label>
+            <textarea ng-required="true" id="user-input-area" ng-model="msg" md-maxlength="150"></textarea>
+          </md-input-container>
+          <div id="moodContainer">
+              <md-radio-group ng-model="data.group1" class="md-primary" layout="row">
+                  <md-radio-button class="mood" value="one" >Apple</md-radio-button>
+                  <md-radio-button class="mood" value="two"> Banana </md-radio-button>
+                  <md-radio-button class="mood" value="three">Mango</md-radio-button>
+                  <md-radio-button class="mood" value="four">Mango</md-radio-button>
+                  <md-radio-button class="mood" value="five">Mango</md-radio-button>
+              </md-radio-group>
+          </div>
+          <md-button id="user-input-send-btn">send</md-button>
       </div>
     </div>
     <div class="response-zone">
@@ -60,5 +65,5 @@
     <!-- Angular Material Javascript now available via Google CDN; version 0.10 used here -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
     
-    <script src="test.js"></script>
+    <script src="main.js"></script>
 </html>
