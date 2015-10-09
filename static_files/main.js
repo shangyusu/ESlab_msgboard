@@ -28,7 +28,6 @@ angular.module('msgBoard', ['ngMaterial'])
         input_textarea_elm.focus();
         if(userNameCheck() && inputCheck(user_input))
             send_to_server(user_input);
-        console.log($scope.userMood);
     });
 
     var send_to_server = function (text_to_send) {
@@ -46,7 +45,8 @@ angular.module('msgBoard', ['ngMaterial'])
     };
 
     var data_from_server_callback = function (result) {
-      log_textarea_elm.value += '>>>'+ username + moodValue+ ': [' + msgText + ']\n';
+        var _JSON_obj = JSON.parse(result);
+        log_textarea_elm.value += '>>>'+ username + ' ' + moodValue+ ' : [' + msgText + '] '+ _JSON_obj.time_stp+'\n';
     };
 
     var username="";
@@ -55,6 +55,7 @@ angular.module('msgBoard', ['ngMaterial'])
 
     var inputCheck = function ( userInput ) {
         moodValueCheck();
+        console.log("user type: " + userInput);
         if(userInput=="") {
             alert("please type something.");
             return false;
