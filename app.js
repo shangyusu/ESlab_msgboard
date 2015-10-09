@@ -77,7 +77,7 @@ var do_submit = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
   _Jobj.time_stp = (date)/1000;
-  if (_Jobj.nickname.length==0)
+  if (_Jobj.nickname.length==0 || /^[a-z0-9]{3,10}$/.test(_Jobj.nickname))
   {
     _success  = false;
     _nicError = true;
