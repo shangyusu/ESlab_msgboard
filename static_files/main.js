@@ -40,16 +40,18 @@ angular.module('msgBoard', ['ngMaterial'])
             time_stp:""
       }
       //http_post('/echo', text_to_send, data_from_server_callback);
+      msgText = text_to_send;
       http_post('/echo', JSON.stringify(_json), data_from_server_callback);
  
     };
 
     var data_from_server_callback = function (result) {
-      log_textarea_elm.value += '>>>'+ username +$scope.userMood+ ': [' + result + ']\n';
+      log_textarea_elm.value += '>>>'+ username +$scope.userMood+ ': [' + msgText + ']\n';
     };
 
     var username="";
     var moodValue="";
+    var msgText= "";
 
     var inputCheck = function ( userInput ) {
         if(userInput=="") {

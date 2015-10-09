@@ -77,24 +77,20 @@ var do_submit = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
   _Jobj.time_stp = (date)/1000;
-  if (_Jobj.nickname.length==0)
-  {
+  if (_Jobj.nickname.length==0){
     _success  = false;
     _nicError = true;
   }
-  if (_Jobj.message.length==0)
-  {
+  if (_Jobj.message.length==0){
     _success  = false;
     _msgError = true;
   }
   var _ret;
-  if (_success)
-  {
+  if (_success){
     _ret={ok:true}
     save_data(_Jobj);
   }
-  else
-  {
+  else{
     var _reason = "";
     if (_nicError)  _reason += " you must provide a valid nickname. ";
     if (_msgError)  _reason += " you must provide a valid message. ";
@@ -127,19 +123,20 @@ var Buffer_to_JSON = function(_buffer){
 var fs = require('fs');
 
 var DataBase;  //用來存data.db的資料
-function read_data(callback)
-{
+
+function read_data(callback){
   fs.readFile('data.db', function (err, data) {
         if (err) return callback(err);
         callback(null, data);
-    })
-}
+    });
+};
+
 read_data(function(err, data){
   DataBase = Buffer_to_JSON(data);
   //console.log(DataBase.length);
 });
-//上面這個function就是把資料讀出來
 
+//上面這個function就是把資料讀出來
 var save_data = function(_obj)
 {
   DataBase[DataBase.length] = _obj;
