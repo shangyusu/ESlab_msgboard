@@ -17,6 +17,25 @@ angular.module('msgBoard', ['ngMaterial'])
         });
     };
     
+    
+    var timestamp_str = function () {
+          var ensure_two_digits = function (num) {
+            return (num < 10) ? '0' + num : '' + num; };
+          var date   = new Date();
+          //console.log(date/1000);  //seconds since epoch
+          var year   = date.getFullYear();
+          var month  = ensure_two_digits(date.getMonth() + 1);
+          var day    = ensure_two_digits(date.getDate());
+          var hour   = ensure_two_digits(date.getHours());
+          var minute = ensure_two_digits(date.getMinutes());
+          var second = ensure_two_digits(date.getSeconds());
+          return year+  '/' +month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+        };
+    
+    
+    
+    
+    
     var input_textarea_elm = document.getElementById('user-input-area');
     var log_textarea_elm = document.getElementById('log-area');
     var send_button_elm = document.getElementById('user-input-send-btn');
