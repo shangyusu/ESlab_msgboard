@@ -128,7 +128,7 @@ var Buffer_to_JSON = function(_buffer){
 
 var fs = require('fs');
 
-var DataBase;  //用來存data.db的資料
+var DataBase;  //用來存data.db的資料的
 function read_data(callback){
   fs.readFile('data.db', function (err, data) {
         if (err) return callback(err);
