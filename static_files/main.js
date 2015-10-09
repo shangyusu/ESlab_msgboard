@@ -35,7 +35,7 @@ angular.module('msgBoard', ['ngMaterial'])
       if (typeof text_to_send !== 'string') throw TypeError();
         var _json = {
             nickname:username,
-            emoji:1,
+            emoji:$scope.userMood,
             message:text_to_send,
             time_stp:""
       }
@@ -46,7 +46,7 @@ angular.module('msgBoard', ['ngMaterial'])
     };
 
     var data_from_server_callback = function (result) {
-      log_textarea_elm.value += '>>>'+ username +$scope.userMood+ ': [' + msgText + ']\n';
+      log_textarea_elm.value += '>>>'+ username + moodValue+ ': [' + msgText + ']\n';
     };
 
     var username="";
@@ -54,6 +54,7 @@ angular.module('msgBoard', ['ngMaterial'])
     var msgText= "";
 
     var inputCheck = function ( userInput ) {
+        moodValueCheck();
         if(userInput=="") {
             alert("please type something.");
             return false;
@@ -75,25 +76,45 @@ angular.module('msgBoard', ['ngMaterial'])
         console.log(userNameCheck());
     });
     
-    /*var moodValueCheck = function(){
-       switch ($scope.userMood){
-            case 😊 :
-               moodValue = 1;
+    
+    var moodValueCheck = function(){
+        if($scope.userMood==1) moodValue = "😊";
+        else if ($scope.userMood==2)  moodValue = "😁";
+        else if ($scope.userMood==3)  moodValue = "😫";
+        else if ($scope.userMood==4)  moodValue = "😢";
+        else if ($scope.userMood==5)  moodValue = "😡";        
+        console.log("user's mood is : " + moodValue); 
+                
+    //unknown error QQQQQ 
+     /*
+       console.log($scope.userMood);
+        var m = $scope.userMood;
+        console.log(m);
+       switch (m)
+       {
+            case 1 :
+               moodValue = "😊";
                break;
-            case 😁 :
-               moodValue = 2;
+            case 2 :
+               moodValue = "😁";
                break;
-            case 😫 :
-               moodValue = 3;
+            case 3 :
+               moodValue = "😫";
                break;
-            case 😢 :
-               moodValue = 4;
+            case 4 :
+               moodValue = "😢";
                break;
-            case 😡 :
-               moodValue = 5;
+            case 5 :
+               moodValue = "😡";
                break;
+           //default:
+               //moodValue = "";
+               //console.log("!!");
+               //break;
        }
-    }*/
+        console.log(moodValue);     
+      */    
+    }
     
 
 });
