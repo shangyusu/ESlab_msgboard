@@ -14,15 +14,15 @@ textarea {
   display: inline-block;
   vertical-align: top;
   padding-top: 10%;
-  width: 35%;
+  width: 40%;
 }
 
 
 .response-zone {
   padding-top: 10%;
   padding-left: 20px;
-  width: 60%;
-  height: 100%;
+  width: 50%;
+  height: 400px;
   display: inline-block;
   vertical-align: top;
     
@@ -61,12 +61,16 @@ header > span {
 }
 
 #userLogin {    
-    position: relative;
+    display: block;
     
 }
 
 #user-name-set-btn {
+    float: right;
     display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin: 0px;
 }
 
 #userLogin > span {
@@ -74,7 +78,8 @@ header > span {
 }
 
 #LeaveMessage {
- 
+
+    display: block;
 }
 
 #user-input-area {
@@ -93,8 +98,10 @@ header > span {
 }
 
 #user-input-send-btn {
+    float: right;
     display: block;
-    margin-top: 4px;
+    margin: 0px;
+    margin-top: 15px;
 }
 
 #LeaveMessage > span {
@@ -109,4 +116,37 @@ header > span {
 #container {
     width: 70%;
     margin: auto;
+}
+
+#nameContainer {
+    padding-bottom: 20px;
+}
+
+#msgContainer {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+#moodContainer {
+    width: 100%;
+}
+
+
+.mood {
+    margin: auto;
+}
+
+
+#refresh-btn {
+    float: right;
+    font-size: 20px;
+}
+
+
+
+#refreshContainer {
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-bottom: 3px;    
 }
