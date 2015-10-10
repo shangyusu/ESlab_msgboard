@@ -60,9 +60,9 @@ angular.module('msgBoard', ['ngMaterial'])
       var _obj = JSON.parse(_data);
       log_textarea_elm.value = "";
       for (i=0; i<_obj.length; i++){
-        console.log(_obj[i].emoji);
-        moodValueCheck(_obj[i].emoji);
-        log_textarea_elm.value +=_obj[i].nickname + moodValue + ' : [ ' + _obj[i].message + ' ] ' + timestamp_str(_obj[i].time_stp) + '\n';
+        console.log(_obj[i][1]);
+        moodValueCheck(_obj[i][1]);
+        log_textarea_elm.value +=_obj[i][0] + moodValue + ' : [ ' + _obj[i][2] + ' ] ' + timestamp_str(_obj[i][3]) + '\n';
       }
     };
     //end of refresh
