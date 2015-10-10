@@ -72,7 +72,7 @@ var parse_refresh = function(_data){
   var _obj = JSON.parse(_data);
   log_textarea_elm.value = "";
   for (i=0; i<_obj.length; i++){
-    log_textarea_elm.value += timestamp_str(_obj[i].time_stp) + ' '+_obj[i].nickname + ' : ' + _obj[i].message + '\n';
+    log_textarea_elm.value += timestamp_str(_obj[i][3]) + ' '+_obj[i][0] + ' : ' + _obj[i][2] + '\n';
   }
 };
 //end of refresh

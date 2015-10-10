@@ -70,7 +70,16 @@ var do_submit = function (send_response, request_body, request_headers) {
   var _nicError = false;  //mickname有沒有error
   var _msgError = false;  //message有沒有error
   var _emjError = false;
+  
   var _Jobj = Buffer_to_JSON(request_body);
+  if (_Jobj==false){
+    _ret={ok:false,reason:"Input syntax isn't in JSON format"};
+    request_body = new Buffer(JSON.stringify(_ret)+'\n');
+    var content_type_default = 'application/octet-stream';
+    var content_type = request_headers['content-type'] || content_type_default;
+    send_response(request_body, {'Content-Type': content_type});
+    return;
+  }
   var date = new Date();
   _Jobj.time_stp = Math.floor( (date)/1000 );
   if ( (_Jobj.nickname.length==0)||(!/^[a-z0-9]{3,10}$/.test(_Jobj.nickname)) ){
@@ -124,7 +133,15 @@ var Buffer_to_JSON = function(_buffer){
   var StringDecoder = require('string_decoder').StringDecoder;
   var myDecoder = new StringDecoder('utf8');    
   var _Jstring = myDecoder.write(_buffer);
-  return JSON.parse(_Jstring);
+  try {
+    var o = JSON.parse(_Jstring);
+    if (o && typeof o === "object" && o !== null) {
+      return o;
+    }
+  }
+  catch (e) { }
+  return false;
+  //return JSON.parse(_Jstring);
 };
 
 
@@ -144,7 +161,8 @@ read_data(function(err, data){
 //上面這個function就是把資料讀出來
 
 var save_data = function(_obj){
-  DataBase[DataBase.length] = _obj;
+  var array_obj = [_obj.nickname, _obj.emoji, _obj.message, _obj.time_stp];
+  DataBase[DataBase.length] = array_obj;
   fs.writeFile('data.db',new Buffer(JSON.stringify(DataBase)),function(err){
     if (err) throw err;
     console.log('append success!');
