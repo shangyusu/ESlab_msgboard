@@ -12,6 +12,7 @@ var http_post = function (where, text_to_send, callback) {
       return response.text();
     })
     .then(function (server_response_text) {
+      //console.log(server_response_text);
       callback(server_response_text);
     })
     .catch(function (err) {
@@ -20,24 +21,17 @@ var http_post = function (where, text_to_send, callback) {
   //這邊我簡單說明一下fetch的功能，fetch基本上就是送出一個request，他的method body url等都是可以設定的參數
 };
 
-var timestamp_str = function () {
-  var ensure_two_digits = function (num) {
-    return (num < 10) ? '0' + num : '' + num; };
-  var date   = new Date();
-  //console.log(date/1000);  //seconds since epoch
-  var year   = date.getFullYear();
-  var month  = ensure_two_digits(date.getMonth() + 1);
-  var day    = ensure_two_digits(date.getDate());
-  var hour   = ensure_two_digits(date.getHours());
-  var minute = ensure_two_digits(date.getMinutes());
-  var second = ensure_two_digits(date.getSeconds());
-  return year+  '/' +month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
-};
 
 var input_textarea_elm = document.getElementById('user-input-area');
 var log_textarea_elm = document.getElementById('log-area');
 var send_button_elm = document.getElementById('user-input-send-btn');
 
+//refresh
+var refresh_btu_elm = document.getElementById('refresh');
+refresh_btu_elm.addEventListener('click', function(){
+  refresh_sig();
+});
+//refresh
 
 send_button_elm.addEventListener('click', function () {
   var user_input = input_textarea_elm.value;
@@ -65,9 +59,38 @@ var send_to_server = function (text_to_send) {
 var data_from_server_callback = function (result) {
   //log_textarea_elm.value += timestamp_str() +'  '+ username + ': [' + result + ']\n' ;
   var _JSON_obj = JSON.parse(result);
-  //console.log(_JSON_obj);
-  log_textarea_elm.value += _JSON_obj.time_stp + ' ' +_JSON_obj.nickname + ' : ' + _JSON_obj.message + '\n';
+  log_textarea_elm.value += timestamp_str(_JSON_obj.time_stp) + ' ' +_JSON_obj.nickname + ' : ' + _JSON_obj.message + '\n';
 };
+
+//refresh
+var refresh_sig = function(){
+  var _vstr = "";
+  http_post('/refresh', _vstr, parse_refresh);
+};
+
+var parse_refresh = function(_data){
+  var _obj = JSON.parse(_data);
+  log_textarea_elm.value = "";
+  for (i=0; i<_obj.length; i++){
+    log_textarea_elm.value += timestamp_str(_obj[i].time_stp) + ' '+_obj[i].nickname + ' : ' + _obj[i].message + '\n';
+  }
+};
+//end of refresh
+
+//unix time to timestamp_str
+var timestamp_str = function (unix) {
+  var ensure_two_digits = function (num) {
+    return (num < 10) ? '0' + num : '' + num; };
+  var date   = new Date(unix*1000);
+  var year   = date.getFullYear();
+  var month  = ensure_two_digits(date.getMonth() + 1);
+  var day    = ensure_two_digits(date.getDate());
+  var hour   = ensure_two_digits(date.getHours());
+  var minute = ensure_two_digits(date.getMinutes());
+  var second = ensure_two_digits(date.getSeconds());
+  return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+};
+//end of unix time to timestamp_str
 
 var username="";
 
