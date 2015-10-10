@@ -34,7 +34,7 @@ angular.module('msgBoard', ['ngMaterial'])
       if (typeof text_to_send !== 'string') throw TypeError();
         var _json = {
             nickname:username,
-            emoji:$scope.userMood,
+            emoji:parseInt($scope.userMood),
             message:text_to_send,
             time_stp:""
       }
@@ -112,11 +112,11 @@ angular.module('msgBoard', ['ngMaterial'])
     
     
     var moodValueCheck = function(mood){
-        if(mood == 1) moodValue = "😊";
-        else if (mood == 2)  moodValue = "😁";
-        else if (mood == 3)  moodValue = "😫";
-        else if (mood == 4)  moodValue = "😢";
-        else if (mood == 5)  moodValue = "😡";        
+        if(mood == 0) moodValue = "😊";
+        else if (mood == 1)  moodValue = "😁";
+        else if (mood == 2)  moodValue = "😫";
+        else if (mood == 3)  moodValue = "😢";
+        else if (mood == 4)  moodValue = "😡";        
         console.log("user's mood is : " + moodValue); 
                 
     //unknown error QQQQQ 
