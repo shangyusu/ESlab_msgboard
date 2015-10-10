@@ -11,6 +11,7 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('POST /echo', do_echo);
   set_handler('POST /submit', do_submit);
   set_handler('POST /read_all', do_read_all);
+  set_handler('POST /refresh',do_refresh);
   //這裡我增加兩個handler，針對read_all submit
   //這樣從terminal 送出這兩種request 我們才有辦法有相對的response
 };
@@ -54,15 +55,9 @@ var do_echo = function (send_response, request_body, request_headers) {
   
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
-  _Jobj.time_stp = (date)/1000; 
+  _Jobj.time_stp = Math.floor( (date)/1000 ); 
   save_data(_Jobj);
-  // 因為要儲存data.db的timestamp格式和要再網頁上看到的格式不同，所以會有兩種obj
-  // 不過我在想之後如果要能夠從data.db資料庫更新的話應該是要直接送unix time(in second)到前端再轉換會比較方便
-  var _RetJobj = Buffer_to_JSON(request_body);
-  _RetJobj.time_stp = timestamp_str(date);
-  var _RetJstring = JSON.stringify(_RetJobj);
-  request_body = new Buffer(_RetJstring);
-  
+  request_body = new Buffer(JSON.stringify(_Jobj));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
@@ -74,36 +69,38 @@ var do_submit = function (send_response, request_body, request_headers) {
   var _success  = true;   //有沒有成功
   var _nicError = false;  //mickname有沒有error
   var _msgError = false;  //message有沒有error
+  var _emjError = false;
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
-  _Jobj.time_stp = (date)/1000;
-  if (_Jobj.nickname.length==0 || /^[a-z0-9]{3,10}$/.test(_Jobj.nickname))
-  {
+  _Jobj.time_stp = Math.floor( (date)/1000 );
+  if ( (_Jobj.nickname.length==0)||(!/^[a-z0-9]{3,10}$/.test(_Jobj.nickname)) ){
     _success  = false;
     _nicError = true;
   }
-  if (_Jobj.message.length==0)
-  {
+  if (_Jobj.message.length==0){
     _success  = false;
     _msgError = true;
   }
+  if (_Jobj.emoji.length==0||(!/^[0-4]$/.test(_Jobj.emoji)) ){
+    _success  = false;
+    _emjError = true;
+  }
   var _ret;
-  if (_success)
-  {
+  if (_success){
     _ret={ok:true}
     save_data(_Jobj);
   }
-  else
-  {
+  else{
     var _reason = "";
     if (_nicError)  _reason += " you must provide a valid nickname. ";
     if (_msgError)  _reason += " you must provide a valid message. ";
+    if (_emjError)  _reason += " you must provide a valid emoji. ";
     _ret={
       ok:false,
       reason:_reason
     }
   }
-  request_body = new Buffer(JSON.stringify(_ret));
+  request_body = new Buffer(JSON.stringify(_ret)+'\n');
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
@@ -111,6 +108,13 @@ var do_submit = function (send_response, request_body, request_headers) {
 
 //直接把data.db的東西全部送出去
 var do_read_all = function(send_response, request_body, request_headers){
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(new Buffer(JSON.stringify(DataBase)), {'Content-Type': content_type});
+};
+
+var do_refresh = function(send_response, request_body, request_headers){
+  //console.log(DataBase);
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(new Buffer(JSON.stringify(DataBase)), {'Content-Type': content_type});
@@ -126,9 +130,8 @@ var Buffer_to_JSON = function(_buffer){
 
 var fs = require('fs');
 
-var DataBase;  //用來存data.db的資料
-function read_data(callback)
-{
+var DataBase;  //用來存data.db的資料的
+function read_data(callback){
   fs.readFile('data.db', function (err, data) {
         if (err) return callback(err);
         callback(null, data);
@@ -140,27 +143,12 @@ read_data(function(err, data){
 });
 //上面這個function就是把資料讀出來
 
-var save_data = function(_obj)
-{
+var save_data = function(_obj){
   DataBase[DataBase.length] = _obj;
   fs.writeFile('data.db',new Buffer(JSON.stringify(DataBase)),function(err){
     if (err) throw err;
     console.log('append success!');
   });
-};
-
-// 將data的物件轉換成 yyyy/mm/dd hh:mm:ss 的string
-var timestamp_str = function (date) {
-  var ensure_two_digits = function (num) {
-    return (num < 10) ? '0' + num : '' + num; };
-  //var date   = new Date();
-  var year   = date.getFullYear();
-  var month  = ensure_two_digits(date.getMonth() + 1);
-  var day    = ensure_two_digits(date.getDate());
-  var hour   = ensure_two_digits(date.getHours());
-  var minute = ensure_two_digits(date.getMinutes());
-  var second = ensure_two_digits(date.getSeconds());
-  return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
 };
 
 httpserver.run(configs);

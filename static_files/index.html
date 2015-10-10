@@ -23,14 +23,14 @@
   </head>
    
       
-  <body ng-app="msgBoard">
+  <body ng-app="msgBoard" ng-controller="msgCtrl">
   <md-content>
    <header>
      <span>Message Board</span>
      <!--h1>Message Board</h1-->
    </header>
    <div id="container">
-    <div ng-controller="inputCtrl" class="request-zone">
+    <div class="request-zone">
       <div id="userLogin">
         <md-input-container id="nameContainer" flex>
           <label>Your name</label>
@@ -57,8 +57,8 @@
       </div>
     </div>
     <div class="response-zone">
-       <div>
-            <span id="refresh-btn" class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+       <div id="refreshContainer">
+            <span ng-click="refresh_sig()" id="refresh-btn" class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
        </div>
         <!--span>Message Board:</span-->
         <textarea readonly id="log-area"></textarea>

@@ -1,5 +1,5 @@
 angular.module('msgBoard', ['ngMaterial'])
-.controller('inputCtrl', function($scope) {
+.controller('msgCtrl', function($scope) {
     
     var http_post = function (where, text_to_send, callback) {
       if (typeof where !== 'string') throw TypeError();
@@ -48,7 +48,41 @@ angular.module('msgBoard', ['ngMaterial'])
         var _JSON_obj = JSON.parse(result);
         log_textarea_elm.value += '>>>'+ username + ' ' + moodValue+ ' : [' + msgText + '] '+ _JSON_obj.time_stp+'\n';
     };
+    
+     //refresh
+    $scope.refresh_sig = function(){
+      var _vstr = "";
+      http_post('/refresh', _vstr, parse_refresh);
+    };
 
+    var parse_refresh = function(_data){
+      var _obj = JSON.parse(_data);
+      log_textarea_elm.value = "";
+      for (i=0; i<_obj.length; i++){
+        log_textarea_elm.value +=_obj[i].nickname + ' : ' + _obj[i].message + ' ' + timestamp_str(_obj[i].time_stp) + '\n';
+      }
+    };
+    //end of refresh
+
+    //unix time to timestamp_str
+    var timestamp_str = function (unix) {
+      var ensure_two_digits = function (num) {
+        return (num < 10) ? '0' + num : '' + num; };
+      var date   = new Date(unix*1000);
+      var year   = date.getFullYear();
+      var month  = ensure_two_digits(date.getMonth() + 1);
+      var day    = ensure_two_digits(date.getDate());
+      var hour   = ensure_two_digits(date.getHours());
+      var minute = ensure_two_digits(date.getMinutes());
+      var second = ensure_two_digits(date.getSeconds());
+      return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+    };
+    //end of unix time to timestamp_str
+
+    
+    
+    
+    
     var username="";
     var moodValue="";
     var msgText= "";
@@ -62,7 +96,7 @@ angular.module('msgBoard', ['ngMaterial'])
         }
         else return true;
     }
-
+ 
     var userNameCheck = function (){
         console.log("username: " + username);
         if(/^[a-z0-9]{3,10}$/.test(username)){

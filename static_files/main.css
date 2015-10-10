@@ -140,7 +140,13 @@ header > span {
 #refresh-btn {
     float: right;
     font-size: 20px;
-    margin-bottom: 3px;    
 }
 
 
+
+#refreshContainer {
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-bottom: 3px;    
+}
