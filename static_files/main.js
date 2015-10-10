@@ -55,7 +55,7 @@ angular.module('msgBoard', ['ngMaterial'])
 
     var inputCheck = function ( userInput ) {
         moodValueCheck();
-        console.log("user type: " + userInput);
+        console.log("user input: " + userInput);
         if(userInput=="") {
             alert("please type something.");
             return false;

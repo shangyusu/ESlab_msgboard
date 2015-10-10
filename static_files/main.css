@@ -136,3 +136,11 @@ header > span {
     margin: auto;
 }
 
+
+#refresh-btn {
+    float: right;
+    font-size: 20px;
+    margin-bottom: 3px;    
+}
+
+
