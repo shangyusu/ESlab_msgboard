@@ -46,7 +46,8 @@ angular.module('msgBoard', ['ngMaterial'])
 
     var data_from_server_callback = function (result) {
         var _JSON_obj = JSON.parse(result);
-        log_textarea_elm.value += '>>>'+ username + ' ' + moodValue+ ' : [' + msgText + '] '+ _JSON_obj.time_stp+'\n';
+        console.log(_JSON_obj);
+        log_textarea_elm.value +=  username + ' ' + moodValue+ ' : [ ' + msgText + ' ] '+ _JSON_obj.time_stp+'\n';
     };
     
      //refresh
@@ -59,7 +60,9 @@ angular.module('msgBoard', ['ngMaterial'])
       var _obj = JSON.parse(_data);
       log_textarea_elm.value = "";
       for (i=0; i<_obj.length; i++){
-        log_textarea_elm.value +=_obj[i].nickname + ' : ' + _obj[i].message + ' ' + timestamp_str(_obj[i].time_stp) + '\n';
+        console.log(_obj[i].emoji);
+        moodValueCheck(_obj[i].emoji);
+        log_textarea_elm.value +=_obj[i].nickname + moodValue + ' : [ ' + _obj[i].message + ' ] ' + timestamp_str(_obj[i].time_stp) + '\n';
       }
     };
     //end of refresh
@@ -79,16 +82,12 @@ angular.module('msgBoard', ['ngMaterial'])
     };
     //end of unix time to timestamp_str
 
-    
-    
-    
-    
     var username="";
     var moodValue="";
     var msgText= "";
 
     var inputCheck = function ( userInput ) {
-        moodValueCheck();
+        moodValueCheck($scope.userMood);
         console.log("user input: " + userInput);
         if(userInput=="") {
             alert("please type something.");
@@ -112,12 +111,12 @@ angular.module('msgBoard', ['ngMaterial'])
     });
     
     
-    var moodValueCheck = function(){
-        if($scope.userMood==1) moodValue = "😊";
-        else if ($scope.userMood==2)  moodValue = "😁";
-        else if ($scope.userMood==3)  moodValue = "😫";
-        else if ($scope.userMood==4)  moodValue = "😢";
-        else if ($scope.userMood==5)  moodValue = "😡";        
+    var moodValueCheck = function(mood){
+        if(mood == 1) moodValue = "😊";
+        else if (mood == 2)  moodValue = "😁";
+        else if (mood == 3)  moodValue = "😫";
+        else if (mood == 4)  moodValue = "😢";
+        else if (mood == 5)  moodValue = "😡";        
         console.log("user's mood is : " + moodValue); 
                 
     //unknown error QQQQQ 
