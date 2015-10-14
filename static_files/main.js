@@ -1,5 +1,5 @@
 angular.module('msgBoard', ['ngMaterial'])
-.controller('msgCtrl', function($scope, $mdToast, $animate) {
+.controller('msgCtrl', function($scope, $mdToast, $animate, $timeout) {
     
     var http_post = function (where, text_to_send, callback) {
       if (typeof where !== 'string') throw TypeError();
@@ -46,7 +46,7 @@ angular.module('msgBoard', ['ngMaterial'])
 
     var data_from_server_callback = function (result) {
         var _JSON_obj = JSON.parse(result);
-        console.log(_JSON_obj);
+        //console.log(_JSON_obj);
         log_textarea_elm.value +=  username + moodValue+ ' : [ ' + msgText + ' ] '+ timestamp_str(_JSON_obj.time_stp)+'\n';
     };
     
@@ -54,13 +54,14 @@ angular.module('msgBoard', ['ngMaterial'])
     $scope.refresh_sig = function(){
       var _vstr = "";
       http_post('/refresh', _vstr, parse_refresh);
+      //showOnly_sig('sam031023');
     };
 
     var parse_refresh = function(_data){
       var _obj = JSON.parse(_data);
       log_textarea_elm.value = "";
       for (i=0; i<_obj.length; i++){
-        console.log(_obj[i][1]);
+        //console.log(_obj[i][1]);
         moodValueCheck(_obj[i][1]);
         log_textarea_elm.value +=_obj[i][0] + moodValue + ' : [ ' + _obj[i][2] + ' ] ' + timestamp_str(_obj[i][3]) + '\n';
       }
@@ -74,6 +75,7 @@ angular.module('msgBoard', ['ngMaterial'])
         password:_passWord
       }
       if(userNameCheck(_name)){
+          //console.log("!!!!!");
         http_post('/register', JSON.stringify(_json), register_success_or_not);   
       }
     };
@@ -93,12 +95,12 @@ angular.module('msgBoard', ['ngMaterial'])
         
       $scope.isQuerySuccess = false;
       var _obj = JSON.parse(_data);
-      console.log(_obj);
+      //console.log(_obj);
       console.log('Query ' + _obj.ok + '!');
       $scope.isQuerySuccess = _obj.ok;
       username = $scope.name;
       if ( !$scope.isQuerySuccess ) 
-          alert("Please sign up an account.");
+          alert(_obj.reason);
       else $scope.showLoginSuccessToast();
     };
      
@@ -106,11 +108,11 @@ angular.module('msgBoard', ['ngMaterial'])
         
       $scope.isRegisterSuccess = false;
       var _obj = JSON.parse(_data);
-      console.log(_obj);
+      //console.log(_obj);
       console.log('Register ' + _obj.ok + '!');
       $scope.isRegisterSuccess = _obj.ok;
       if ( $scope.isRegisterSuccess ) $scope.showRegisterSuccessToast();
-      else alert("This name is already used.");
+      else alert(_obj.reason);
     };
     $scope.toastPosition = {
         bottom: false,
@@ -144,6 +146,33 @@ angular.module('msgBoard', ['ngMaterial'])
     };  
     //end of register and query
 
+    //showOnly
+    $scope.showOnly_sig = function(){
+      var _usrname = $scope.userShowOnly;
+      //console.log(_usrname);
+      if(_usrname!==undefined)
+        http_post('/showOnly',_usrname,parse_refresh);
+      else alert("Please select an user.");
+    };
+    //end of showOnly
+  
+    //get List
+    $scope.userlist=[];
+    
+    var getList = function(_formServer){
+        $scope.userlist = JSON.parse(_formServer);
+      };
+    //http_post('/list',"",getList);
+    //end of getList
+  
+    // load the user list 
+    $scope.loadUsers = function (){
+        console.log("!!!!");
+        http_post('/list',"",getList);
+        console.log($scope.userlist);
+        $scope.users = $scope.userlist;
+    }
+    
     //unix time to timestamp_str
     var timestamp_str = function (unix) {
       var ensure_two_digits = function (num) {
@@ -166,7 +195,7 @@ angular.module('msgBoard', ['ngMaterial'])
     var inputCheck = function ( userInput ) {
         //console.log($scope.userMood);
         moodValueCheck($scope.userMood);
-        console.log("user input: " + userInput);
+        //console.log("user input: " + userInput);
         if(!$scope.isQuerySuccess){
             alert("please login.");
             return false;
@@ -183,7 +212,7 @@ angular.module('msgBoard', ['ngMaterial'])
     }
  
     var userNameCheck = function (){
-        console.log("username: " + $scope.name);
+        //console.log("username: " + $scope.name);
         if(/^[a-z0-9]{3,10}$/.test($scope.name) && $scope.name!==undefined){
              console.log("valid name!");
              return true;
@@ -195,15 +224,16 @@ angular.module('msgBoard', ['ngMaterial'])
     }
     // set button event
     $('#user-login-btn').click(function(){
+        //console.log($scope.userShowOnly);
         //username = $('#userName').val();
         query_sig($scope.name, $scope.password); 
-        console.log("username check: " + userNameCheck());
+        //console.log("username check: " + userNameCheck());
     });
     
     $('#user-register-btn').click(function(){
         register_sig($scope.name, $scope.password);
-        console.log("nickname: " + $scope.name);
-        console.log("password: " + $scope.password);
+        //console.log("nickname: " + $scope.name);
+        //console.log("password: " + $scope.password);
     });
     
     var moodValueCheck = function(mood){

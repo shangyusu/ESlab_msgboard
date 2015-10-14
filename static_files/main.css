@@ -156,3 +156,18 @@ header > span {
     display: inline-block;
     margin-top: 0px;
 }
+
+#userShowOnly {
+    padding: 0px;
+    float: right;
+}
+
+#userShowOnlyContainer {
+    float: right;
+}
+
+#only-show-btn {
+    float: right;
+    margin: 0px;
+    margin-bottom: 3px;
+}

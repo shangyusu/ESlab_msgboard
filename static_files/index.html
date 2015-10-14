@@ -62,9 +62,15 @@
       </div>
     </div>
     <div class="response-zone">
-       <div id="refreshContainer">
+      <div id="refreshContainer">
             <span ng-click="refresh_sig()" id="refresh-btn" class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
        </div>
+       <div id="userShowOnlyContainer">
+        <md-select placeholder="select" md-on-open="loadUsers()" ng-model="userShowOnly" style="min-width: 100px; margin-right: 0px;" id="userShowOnly">
+            <md-option ng-repeat="user in users">{{user}}</md-option>
+        </md-select>
+        <md-button id="only-show-btn" ng-click="showOnly_sig()">Show</md-button>
+      </div>
         <!--span>Message Board:</span-->
         <textarea readonly id="log-area"></textarea>
     </div>

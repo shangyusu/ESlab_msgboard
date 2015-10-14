@@ -14,6 +14,8 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('POST /refresh', do_refresh);
   set_handler('POST /register', do_register);
   set_handler('POST /query', do_query);
+  set_handler('POST /showOnly', showOnly);
+  set_handler('POST /list',do_sendList);
   //這裡我增加兩個handler，針對read_all submit
   //這樣從terminal 送出這兩種request 我們才有辦法有相對的response
 };
@@ -132,23 +134,48 @@ var do_refresh = function(send_response, request_body, request_headers){
 };
 
 var do_register = function (send_response, request_body, request_headers) {
-  read_user(function(err, data){
+  /*read_user(function(err, data){
       UserData = Buffer_to_JSON(data);
-  });
-  var _ret={ok:true};
+  });*/
+  var _ret;
   var success = true;
-    
+  var _usrError = false;
+  var _pwdError = false;
+  
   var _Jobj = Buffer_to_JSON(request_body);
-  //console.log(UserData);
+  if (_Jobj==false){
+    _ret={ok:false,reason:"Input syntax isn't in JSON format"};
+    request_body = new Buffer(JSON.stringify(_ret)+'\n');
+    var content_type_default = 'application/octet-stream';
+    var content_type = request_headers['content-type'] || content_type_default;
+    send_response(request_body, {'Content-Type': content_type});
+    return;
+  }
+  
   for (i=0; i<UserData.length; i++){
     if ( (UserData[i][0]==_Jobj.nickname)){
-        _ret={ok:false};
+        _usrError = true;
         success = false;
     }
   }
-    
-  if(success)save_data(_Jobj,'user.db');
-
+  if (typeof(_Jobj.password)!='string'){
+    _pwdError = true;
+    success   = false;
+  }
+  
+  if(success){
+    save_data(_Jobj,'user.db');
+    _ret={ok:true};
+  }
+  else{
+    var _reason = "";
+    if (_usrError)  _reason += " The username is already exist. " + '\n';
+    if (_pwdError)  _reason += " The length of password can't be zero. " + '\n';
+    _ret={
+      ok:false,
+      reason:_reason
+    };
+  }
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
@@ -157,12 +184,48 @@ var do_register = function (send_response, request_body, request_headers) {
 
 var do_query = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
-  var success = false;
+  var success   = false;
+  var _pwdError = false;
   for (i=0; i<UserData.length; i++){
-    if ( (UserData[i][0]==_Jobj.nickname)&&(UserData[i][1]==_Jobj.password) )
-      success = true;
+    if (UserData[i][0]==_Jobj.nickname){
+      if(UserData[i][1]==_Jobj.password)
+        success = true;
+      else{
+        _pwdError = true;
+        break;
+      }
+    }
   }
-  var _ret={ok:success};
+  var _ret={ok:success,reason:""};
+  if (_pwdError) _ret.reason += "The password isn't correct! ";
+  else if (!success) _ret.reason += "Please sign up first! ";
+  request_body = new Buffer(JSON.stringify(_ret));
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(request_body, {'Content-Type': content_type});
+};
+
+var showOnly = function (send_response, request_body, request_headers) {
+  
+  var StringDecoder = require('string_decoder').StringDecoder;
+  var myDecoder = new StringDecoder('utf8');    
+  var _specifyName = myDecoder.write(request_body);
+  
+  var _ret =[];
+  for (i=0; i<DataBase.length; i++)
+    if(DataBase[i][0]==_specifyName)
+      _ret[_ret.length] = DataBase[i];
+  
+  request_body = new Buffer(JSON.stringify(_ret));
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(request_body, {'Content-Type': content_type});
+};
+
+var do_sendList = function(send_response, request_body, request_headers){
+  var _ret =[];
+  for (i=0; i<UserData.length; i++)
+      _ret[_ret.length] = UserData[i][0];
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
@@ -240,4 +303,5 @@ var save_data = function(_obj, target_fileName){
 };
 
 //end register
+
 httpserver.run(configs);
