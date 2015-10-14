@@ -108,6 +108,7 @@ angular.module('msgBoard', ['ngMaterial'])
       $scope.isRegisterSuccess = _obj.ok;
       if ( $scope.isRegisterSuccess ) 
           alert("You can login now.");
+      else alert("This name is already used.");
     };
     //end of register and query
 
