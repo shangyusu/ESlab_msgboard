@@ -47,7 +47,7 @@ angular.module('msgBoard', ['ngMaterial'])
     var data_from_server_callback = function (result) {
         var _JSON_obj = JSON.parse(result);
         console.log(_JSON_obj);
-        log_textarea_elm.value +=  username + ' ' + moodValue+ ' : [ ' + msgText + ' ] '+ timestamp_str(_JSON_obj.time_stp)+'\n';
+        log_textarea_elm.value +=  username + moodValue+ ' : [ ' + msgText + ' ] '+ timestamp_str(_JSON_obj.time_stp)+'\n';
     };
     
      //refresh

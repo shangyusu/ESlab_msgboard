@@ -132,9 +132,23 @@ var do_refresh = function(send_response, request_body, request_headers){
 };
 
 var do_register = function (send_response, request_body, request_headers) {
-  var _Jobj = Buffer_to_JSON(request_body);
-  save_data(_Jobj,'user.db');
+  read_user(function(err, data){
+      UserData = Buffer_to_JSON(data);
+  });
   var _ret={ok:true};
+  var success = true;
+    
+  var _Jobj = Buffer_to_JSON(request_body);
+  //console.log(UserData);
+  for (i=0; i<UserData.length; i++){
+    if ( (UserData[i][0]==_Jobj.nickname)){
+        _ret={ok:false};
+        success = false;
+    }
+  }
+    
+  if(success)save_data(_Jobj,'user.db');
+
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
