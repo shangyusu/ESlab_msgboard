@@ -145,6 +145,12 @@ angular.module('msgBoard', ['ngMaterial'])
     };  
     //end of register and query
 
+    //showOnly
+    var showOnly_sig = function(_usrname){
+      http_post('/showOnly',_usrname,parse_refresh);
+    };
+    //end of showOnly
+  
     //unix time to timestamp_str
     var timestamp_str = function (unix) {
       var ensure_two_digits = function (num) {
