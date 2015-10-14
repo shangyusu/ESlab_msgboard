@@ -86,7 +86,7 @@ angular.module('msgBoard', ['ngMaterial'])
     
     var success_or_not = function(_data){
       var _obj = JSON.parse(_data);
-      console.log('Register ' + _obj.ok + '!');
+      console.log('Register/Query ' + _obj.ok + '!');
     };
     //end of register and query
   
