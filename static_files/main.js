@@ -168,12 +168,7 @@ angular.module('msgBoard', ['ngMaterial'])
         else if (mood == 2)  moodValue = "😫";
         else if (mood == 3)  moodValue = "😢";
         else if (mood == 4)  moodValue = "😡";        
-        console.log("user's mood is : " + moodValue); 
-     
-        
-        
-        
-        
+        console.log("user's mood is : " + moodValue);    
     //unknown error QQQQQ 
      /*
        console.log($scope.userMood);
