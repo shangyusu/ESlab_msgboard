@@ -132,9 +132,43 @@ var do_refresh = function(send_response, request_body, request_headers){
 };
 
 var do_register = function (send_response, request_body, request_headers) {
+  /*read_user(function(err, data){
+      UserData = Buffer_to_JSON(data);
+  });*/
+  var _ret;
+  var success = true;
+  var _usrError = false;
+  var _pwdError = false;
+  
+  
   var _Jobj = Buffer_to_JSON(request_body);
-  save_data(_Jobj,'user.db');
-  var _ret={ok:true};
+  //console.log(UserData);
+  
+  for (i=0; i<UserData.length; i++){
+    if ( (UserData[i][0]==_Jobj.nickname)){
+        _usrError = true;
+        success = false;
+    }
+  }
+  if (typeof(_Jobj.password)!='string'){
+    _pwdError = true;
+    success   = false;
+  }
+  //_ret.ok = success;
+  
+  if(success){
+    save_data(_Jobj,'user.db');
+    _ret={ok:true};
+  }
+  else{
+    var _reason = "";
+    if (_usrError)  _reason += " The username is already exist. " + '\n';
+    if (_pwdError)  _reason += " The length of password can't be zero. " + '\n';
+    _ret={
+      ok:false,
+      reason:_reason
+    };
+  }
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
@@ -143,12 +177,21 @@ var do_register = function (send_response, request_body, request_headers) {
 
 var do_query = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
-  var success = false;
+  var success   = false;
+  var _pwdError = false;
   for (i=0; i<UserData.length; i++){
-    if ( (UserData[i][0]==_Jobj.nickname)&&(UserData[i][1]==_Jobj.password) )
-      success = true;
+    if (UserData[i][0]==_Jobj.nickname){
+      if(UserData[i][1]==_Jobj.password)
+        success = true;
+      else{
+        _pwdError = true;
+        break;
+      }
+    }
   }
-  var _ret={ok:success};
+  var _ret={ok:success,reason:""};
+  if (_pwdError) _ret.reason += "The password isn't correct! ";
+  else if (!success) _ret.reason += "Please sign up first! ";
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
