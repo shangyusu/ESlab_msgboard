@@ -152,11 +152,11 @@ angular.module('msgBoard', ['ngMaterial'])
     //end of showOnly
   
     //get List
-    var list;
-    http_post('/list',"",getList);
+    $scope.userlist=[];
     var getList = function(_formServer){
-      list = JSON.parse(_formServer);
-    };
+        $scope.userlist = JSON.parse(_formServer);
+      };
+    http_post('/list',"",getList);
     //end of getList
   
     //unix time to timestamp_str

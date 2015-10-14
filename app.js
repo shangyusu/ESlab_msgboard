@@ -225,11 +225,11 @@ var showOnly = function (send_response, request_body, request_headers) {
 var do_sendList = function(send_response, request_body, request_headers){
   var _ret =[];
   for (i=0; i<UserData.length; i++)
-      _ret[UserData.length] = DataBase[i][0];
+      _ret[_ret.length] = UserData[i][0];
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
-  send_response(response_body, {'Content-Type': content_type});
+  send_response(request_body, {'Content-Type': content_type});
 };
 
 var Buffer_to_JSON = function(_buffer){
@@ -303,4 +303,5 @@ var save_data = function(_obj, target_fileName){
 };
 
 //end register
+
 httpserver.run(configs);
