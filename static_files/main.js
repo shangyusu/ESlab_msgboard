@@ -73,8 +73,10 @@ angular.module('msgBoard', ['ngMaterial'])
         nickname:_name,
         password:_passWord
       }
-      if(userNameCheck(_name))
-        http_post('/register', JSON.stringify(_json), register_success_or_not);
+      if(userNameCheck(_name)){
+          console.log("!!!!!");
+        http_post('/register', JSON.stringify(_json), register_success_or_not);   
+      }
     };
     
     var query_sig = function(_name, _passWord){
@@ -183,7 +185,7 @@ angular.module('msgBoard', ['ngMaterial'])
  
     var userNameCheck = function (){
         console.log("username: " + $scope.name);
-        if(/^[a-z0-9]{3,10}$/.test($scope.name)){
+        if(/^[a-z0-9]{3,10}$/.test($scope.name) && $scope.name!==undefined){
              console.log("valid name!");
              return true;
         }
