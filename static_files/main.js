@@ -95,6 +95,8 @@ angular.module('msgBoard', ['ngMaterial'])
       console.log('Query ' + _obj.ok + '!');
       $scope.isQuerySuccess = _obj.ok;
       username = $scope.name;
+      if ( !$scope.isQuerySuccess ) 
+          alert("Please sign up an account.");
     };
      
     var register_success_or_not = function(_data){
@@ -104,6 +106,8 @@ angular.module('msgBoard', ['ngMaterial'])
       console.log(_obj);
       console.log('Register ' + _obj.ok + '!');
       $scope.isRegisterSuccess = _obj.ok;
+      if ( $scope.isRegisterSuccess ) 
+          alert("You can login now.");
     };
     //end of register and query
 
