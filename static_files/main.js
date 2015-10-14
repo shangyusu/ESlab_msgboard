@@ -165,7 +165,11 @@ angular.module('msgBoard', ['ngMaterial'])
         //console.log($scope.userMood);
         moodValueCheck($scope.userMood);
         console.log("user input: " + userInput);
-        if(userInput=="") {
+        if(!$scope.isQuerySuccess){
+            alert("please login.");
+            return false;
+        }
+        else if(userInput=="") {
             alert("please type something.");
             return false;
         }
