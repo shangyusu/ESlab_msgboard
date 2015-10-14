@@ -5,47 +5,79 @@
     <title>Message Board</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="./main.css">
+    <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  </head>
-  <body>
 
-    <h1>Message Board</h1>
-    <p>This web app is under construction.</p>
-
-    <div>
-        
-      <div>
-        <h4>input your name</h1>
-        <textarea name="your name" id="userName"></textarea>
-        <button id="user-name-set-btn">login</button> 
-      </div>
-        
-      <form>
-      please select your emoji<br>
-      <input type="radio" name="userEmoji" value="0"> 爽<br>
-      <input type="radio" name="userEmoji" value="1"> 普普<br> 
-      <input type="radio" name="userEmoji" value="2"> 差<br>
-      </form>
- 
-        
-      <div class="request-zone">
-        <h2>Leave Message:</h2>
-        <textarea id="user-input-area" autofocus></textarea>
-        <button id="user-input-send-btn">send</button>
-      </div>
-      <div class="response-zone">
-        <h2>Message Board:</h2>
-        <textarea readonly id="log-area"></textarea>
-      </div>
-      
-      <div>
-        <button id="refresh">refresh</button>
-      </div>
+    <!-- Angular Material CSS now available via Google CDN; version 0.10 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
     
-        
+    <!--font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200">
+    
+    <!--Bootstrap-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  </head>
+   
+      
+  <body ng-app="msgBoard" ng-controller="msgCtrl">
+  <md-content>
+   <header>
+     <span>Message Board</span>
+     <!--h1>Message Board</h1-->
+   </header>
+   <div id="container">
+    <div class="request-zone">
+      <div id="userLogin">
+        <md-input-container id="nameContainer" flex>
+          <label>Nickname</label>
+          <input id="userName" ng-model="name" ng-required="true"  md-maxlength="10">
+        </md-input-container>
+        <md-input-container>
+          <label>Password</label>
+          <input id="userPwd" ng-model="password" ng-required="true"  md-maxlength="10">
+        </md-input-container>
+        <md-button id="user-name-set-btn">Login</md-button>
+        <md-button id="user-register-btn">Register</md-button>
+      </div>
+      <!--div class="request-zone"-->
+      <div id="LeaveMessage">       
+          <md-input-container id="msgContainer" flex>
+            <label>Message</label>
+            <textarea ng-required="true" id="user-input-area" ng-model="msg" md-maxlength="150"></textarea>
+          </md-input-container>
+          <div id="moodContainer">
+              <md-radio-group ng-model="userMood" class="md-primary" layout="row">
+                  <md-radio-button class="mood" value="0">😊</md-radio-button>
+                  <md-radio-button class="mood" value="1">😁</md-radio-button>
+                  <md-radio-button class="mood" value="2">😫</md-radio-button>
+                  <md-radio-button class="mood" value="3">😢</md-radio-button>
+                  <md-radio-button class="mood" value="4">😡</md-radio-button>
+              </md-radio-group>
+          </div>
+          <md-button id="user-input-send-btn">send</md-button>
+      </div>
     </div>
-
-    <script src="main.js"></script>
-
+    <div class="response-zone">
+       <div id="refreshContainer">
+            <span ng-click="refresh_sig()" id="refresh-btn" class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+       </div>
+        <!--span>Message Board:</span-->
+        <textarea readonly id="log-area"></textarea>
+    </div>
+    </div>
+    </md-content>
   </body>
+   
+    <!-- Angular Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <!-- Angular Material Javascript now available via Google CDN; version 0.10 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
+    
+    <script src="main.js"></script>
 </html>

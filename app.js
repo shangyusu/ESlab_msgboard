@@ -11,7 +11,9 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('POST /echo', do_echo);
   set_handler('POST /submit', do_submit);
   set_handler('POST /read_all', do_read_all);
-  set_handler('POST /refresh',do_refresh);
+  set_handler('POST /refresh', do_refresh);
+  set_handler('POST /register', do_register);
+  set_handler('POST /query', do_query);
   //這裡我增加兩個handler，針對read_all submit
   //這樣從terminal 送出這兩種request 我們才有辦法有相對的response
 };
@@ -56,7 +58,7 @@ var do_echo = function (send_response, request_body, request_headers) {
   var _Jobj = Buffer_to_JSON(request_body);
   var date = new Date();
   _Jobj.time_stp = Math.floor( (date)/1000 ); 
-  save_data(_Jobj);
+  save_data(_Jobj,'data.db');
   request_body = new Buffer(JSON.stringify(_Jobj));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
@@ -96,8 +98,8 @@ var do_submit = function (send_response, request_body, request_headers) {
   }
   var _ret;
   if (_success){
-    _ret={ok:true}
-    save_data(_Jobj);
+    _ret={ok:true};
+    save_data(_Jobj,'data.db');
   }
   else{
     var _reason = "";
@@ -129,6 +131,30 @@ var do_refresh = function(send_response, request_body, request_headers){
   send_response(new Buffer(JSON.stringify(DataBase)), {'Content-Type': content_type});
 };
 
+var do_register = function (send_response, request_body, request_headers) {
+  var _Jobj = Buffer_to_JSON(request_body);
+  save_data(_Jobj,'user.db');
+  var _ret={ok:true};
+  request_body = new Buffer(JSON.stringify(_ret));
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(request_body, {'Content-Type': content_type});
+};
+
+var do_query = function (send_response, request_body, request_headers) {
+  var _Jobj = Buffer_to_JSON(request_body);
+  var success = false;
+  for (i=0; i<UserData.length; i++){
+    if ( (UserData[i][0]==_Jobj.nickname)&&(UserData[i][1]==_Jobj.password) )
+      success = true;
+  }
+  var _ret={ok:success};
+  request_body = new Buffer(JSON.stringify(_ret));
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(request_body, {'Content-Type': content_type});
+};
+
 var Buffer_to_JSON = function(_buffer){
   var StringDecoder = require('string_decoder').StringDecoder;
   var myDecoder = new StringDecoder('utf8');    
@@ -147,26 +173,57 @@ var Buffer_to_JSON = function(_buffer){
 
 var fs = require('fs');
 
+// begin of data.db
 var DataBase;  //用來存data.db的資料的
 function read_data(callback){
   fs.readFile('data.db', function (err, data) {
         if (err) return callback(err);
         callback(null, data);
     })
-}
+};
 read_data(function(err, data){
   DataBase = Buffer_to_JSON(data);
   //console.log(DataBase.length);
 });
 //上面這個function就是把資料讀出來
 
-var save_data = function(_obj){
-  var array_obj = [_obj.nickname, _obj.emoji, _obj.message, _obj.time_stp];
-  DataBase[DataBase.length] = array_obj;
-  fs.writeFile('data.db',new Buffer(JSON.stringify(DataBase)),function(err){
-    if (err) throw err;
-    console.log('append success!');
-  });
+
+// end of data.db
+
+//begin register
+var UserData;
+function read_user(callback){
+  fs.readFile('user.db', function (err, data) {
+        if (err) return callback(err);
+        callback(null, data);
+    })
+};
+read_user(function(err, data){
+  UserData = Buffer_to_JSON(data);
+  //console.log(DataBase.length);
+});
+
+var save_data = function(_obj, target_fileName){
+  if (target_fileName=='data.db'){
+    var array_obj = [_obj.nickname, _obj.emoji, _obj.message, _obj.time_stp];
+    DataBase[DataBase.length] = array_obj;
+    fs.writeFile('data.db',new Buffer(JSON.stringify(DataBase)),function(err){
+      if (err) throw err;
+      console.log('append success!');
+    });
+    return;
+  }
+  else if (target_fileName=='user.db'){
+    var array_obj = [_obj.nickname, _obj.password];
+    UserData[UserData.length] = array_obj;
+    fs.writeFile('user.db',new Buffer(JSON.stringify(UserData)),function(err){
+      if (err) throw err;
+      console.log('register success!');
+    });
+    return;
+  }
+  
 };
 
+//end register
 httpserver.run(configs);
