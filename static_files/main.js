@@ -97,7 +97,7 @@ angular.module('msgBoard', ['ngMaterial'])
       username = $scope.name;
       if ( !$scope.isQuerySuccess ) 
           alert("Please sign up an account.");
-      else $scope.loginSuccessToast();
+      else $scope.showLoginSuccessToast();
     };
      
     var register_success_or_not = function(_data){
@@ -107,8 +107,7 @@ angular.module('msgBoard', ['ngMaterial'])
       console.log(_obj);
       console.log('Register ' + _obj.ok + '!');
       $scope.isRegisterSuccess = _obj.ok;
-      if ( $scope.isRegisterSuccess ) 
-          alert("You can login now.");
+      if ( $scope.isRegisterSuccess ) $scope.showRegisterSuccessToast();
       else alert("This name is already used.");
     };
     $scope.toastPosition = {
@@ -124,10 +123,19 @@ angular.module('msgBoard', ['ngMaterial'])
           .join(' ');
       };
     
-    $scope.loginSuccessToast = function() {
+    $scope.showLoginSuccessToast = function() {
         $mdToast.show(
           $mdToast.simple()
             .content('Login success!')
+            .position($scope.getToastPosition())
+            .hideDelay(3000)
+        );
+    };
+    
+    $scope.showRegisterSuccessToast = function() {
+        $mdToast.show(
+          $mdToast.simple()
+            .content('You can login now.')
             .position($scope.getToastPosition())
             .hideDelay(3000)
         );
@@ -154,10 +162,15 @@ angular.module('msgBoard', ['ngMaterial'])
     var msgText= "";
 
     var inputCheck = function ( userInput ) {
+        //console.log($scope.userMood);
         moodValueCheck($scope.userMood);
         console.log("user input: " + userInput);
         if(userInput=="") {
             alert("please type something.");
+            return false;
+        }
+        else if ($scope.userMood === undefined){
+            alert("please choose one emoji.");
             return false;
         }
         else if(userInput!=="" && $scope.isQuerySuccess) return true;
