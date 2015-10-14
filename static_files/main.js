@@ -74,7 +74,6 @@ angular.module('msgBoard', ['ngMaterial'])
         password:_passWord
       }
       if(userNameCheck(_name)){
-          console.log("!!!!!");
         http_post('/register', JSON.stringify(_json), register_success_or_not);   
       }
     };
