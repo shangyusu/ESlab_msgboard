@@ -150,3 +150,9 @@ header > span {
     height: 20px;
     margin-bottom: 3px;    
 }
+
+#user-register-btn {
+    float: right;
+    display: inline-block;
+    margin-top: 0px;
+}

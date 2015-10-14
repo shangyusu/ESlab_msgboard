@@ -33,10 +33,15 @@
     <div class="request-zone">
       <div id="userLogin">
         <md-input-container id="nameContainer" flex>
-          <label>Your name</label>
+          <label>Nickname</label>
           <input id="userName" ng-model="name" ng-required="true"  md-maxlength="10">
         </md-input-container>
-        <md-button id="user-name-set-btn">login</md-button>
+        <md-input-container>
+          <label>Password</label>
+          <input id="userPwd" ng-model="password" ng-required="true"  md-maxlength="10">
+        </md-input-container>
+        <md-button id="user-name-set-btn">Login</md-button>
+        <md-button id="user-register-btn">Register</md-button>
       </div>
       <!--div class="request-zone"-->
       <div id="LeaveMessage">       
