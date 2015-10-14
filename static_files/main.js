@@ -73,7 +73,8 @@ angular.module('msgBoard', ['ngMaterial'])
         nickname:_name,
         password:_passWord
       }
-      http_post('/register', JSON.stringify(_json), register_success_or_not);
+      if(userNameCheck(_name))
+        http_post('/register', JSON.stringify(_json), register_success_or_not);
     };
     
     var query_sig = function(_name, _passWord){
@@ -186,9 +187,11 @@ angular.module('msgBoard', ['ngMaterial'])
              console.log("valid name!");
              return true;
         }
-        else alert("Invalid user name!");
+        else {
+            alert("Invalid user name!");
+            return false;
+        }
     }
-    
     // set button event
     $('#user-login-btn').click(function(){
         //username = $('#userName').val();
