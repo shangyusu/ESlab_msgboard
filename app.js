@@ -15,6 +15,7 @@ var configs = function (set_port, set_hostname, set_handler) {
   set_handler('POST /register', do_register);
   set_handler('POST /query', do_query);
   set_handler('POST /showOnly', showOnly);
+  set_handler('POST /list',do_sendList);
   //這裡我增加兩個handler，針對read_all submit
   //這樣從terminal 送出這兩種request 我們才有辦法有相對的response
 };
@@ -219,6 +220,16 @@ var showOnly = function (send_response, request_body, request_headers) {
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
   send_response(request_body, {'Content-Type': content_type});
+};
+
+var do_sendList = function(send_response, request_body, request_headers){
+  var _ret =[];
+  for (i=0; i<DataBase.length; i++)
+      _ret[_ret.length] = DataBase[i][0];
+  request_body = new Buffer(JSON.stringify(_ret));
+  var content_type_default = 'application/octet-stream';
+  var content_type = request_headers['content-type'] || content_type_default;
+  send_response(response_body, {'Content-Type': content_type});
 };
 
 var Buffer_to_JSON = function(_buffer){

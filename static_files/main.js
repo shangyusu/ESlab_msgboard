@@ -151,6 +151,14 @@ angular.module('msgBoard', ['ngMaterial'])
     };
     //end of showOnly
   
+    //get List
+    var list;
+    http_post('/list',"",getList);
+    var getList = function(_formServer){
+      list = JSON.parse(_formServer);
+    };
+    //end of getList
+  
     //unix time to timestamp_str
     var timestamp_str = function (unix) {
       var ensure_two_digits = function (num) {
