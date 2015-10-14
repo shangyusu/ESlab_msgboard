@@ -224,8 +224,8 @@ var showOnly = function (send_response, request_body, request_headers) {
 
 var do_sendList = function(send_response, request_body, request_headers){
   var _ret =[];
-  for (i=0; i<DataBase.length; i++)
-      _ret[_ret.length] = DataBase[i][0];
+  for (i=0; i<UserData.length; i++)
+      _ret[UserData.length] = DataBase[i][0];
   request_body = new Buffer(JSON.stringify(_ret));
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
