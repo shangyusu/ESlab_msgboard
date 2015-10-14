@@ -1,5 +1,5 @@
 angular.module('msgBoard', ['ngMaterial'])
-.controller('msgCtrl', function($scope) {
+.controller('msgCtrl', function($scope, $mdToast, $animate) {
     
     var http_post = function (where, text_to_send, callback) {
       if (typeof where !== 'string') throw TypeError();
@@ -97,6 +97,7 @@ angular.module('msgBoard', ['ngMaterial'])
       username = $scope.name;
       if ( !$scope.isQuerySuccess ) 
           alert("Please sign up an account.");
+      else $scope.loginSuccessToast();
     };
      
     var register_success_or_not = function(_data){
@@ -110,6 +111,27 @@ angular.module('msgBoard', ['ngMaterial'])
           alert("You can login now.");
       else alert("This name is already used.");
     };
+    $scope.toastPosition = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    
+      $scope.getToastPosition = function() {
+        return Object.keys($scope.toastPosition)
+          .filter(function(pos) { return $scope.toastPosition[pos]; })
+          .join(' ');
+      };
+    
+    $scope.loginSuccessToast = function() {
+        $mdToast.show(
+          $mdToast.simple()
+            .content('Login success!')
+            .position($scope.getToastPosition())
+            .hideDelay(3000)
+        );
+    };  
     //end of register and query
 
     //unix time to timestamp_str
