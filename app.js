@@ -209,7 +209,7 @@ var showOnly = function (send_response, request_body, request_headers) {
   
   var StringDecoder = require('string_decoder').StringDecoder;
   var myDecoder = new StringDecoder('utf8');    
-  var _specifyName = myDecoder.write(_buffer);
+  var _specifyName = myDecoder.write(request_body);
   
   var _ret =[];
   for (i=0; i<DataBase.length; i++)

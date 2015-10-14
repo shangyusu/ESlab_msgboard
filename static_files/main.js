@@ -54,6 +54,7 @@ angular.module('msgBoard', ['ngMaterial'])
     $scope.refresh_sig = function(){
       var _vstr = "";
       http_post('/refresh', _vstr, parse_refresh);
+      //showOnly_sig('sam031023');
     };
 
     var parse_refresh = function(_data){
