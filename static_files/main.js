@@ -38,7 +38,7 @@ angular.module('msgBoard', ['ngMaterial'])
             message:text_to_send,
             time_stp:""
       }
-      //http_post('/echo', text_to_send, data_from_server_callback);
+        
       msgText = text_to_send;
       http_post('/echo', JSON.stringify(_json), data_from_server_callback);
  
@@ -46,7 +46,6 @@ angular.module('msgBoard', ['ngMaterial'])
 
     var data_from_server_callback = function (result) {
         var _JSON_obj = JSON.parse(result);
-        //console.log(_JSON_obj);
         log_textarea_elm.value +=  username + moodValue+ ' : [ ' + msgText + ' ] '+ timestamp_str(_JSON_obj.time_stp)+'\n';
     };
     
@@ -54,14 +53,13 @@ angular.module('msgBoard', ['ngMaterial'])
     $scope.refresh_sig = function(){
       var _vstr = "";
       http_post('/refresh', _vstr, parse_refresh);
-      //showOnly_sig('sam031023');
     };
 
     var parse_refresh = function(_data){
       var _obj = JSON.parse(_data);
       log_textarea_elm.value = "";
+        
       for (i=0; i<_obj.length; i++){
-        //console.log(_obj[i][1]);
         moodValueCheck(_obj[i][1]);
         log_textarea_elm.value +=_obj[i][0] + moodValue + ' : [ ' + _obj[i][2] + ' ] ' + timestamp_str(_obj[i][3]) + '\n';
       }
@@ -75,7 +73,6 @@ angular.module('msgBoard', ['ngMaterial'])
         password:_passWord
       }
       if(userNameCheck(_name)){
-          //console.log("!!!!!");
         http_post('/register', JSON.stringify(_json), register_success_or_not);   
       }
     };
@@ -95,7 +92,6 @@ angular.module('msgBoard', ['ngMaterial'])
         
       $scope.isQuerySuccess = false;
       var _obj = JSON.parse(_data);
-      //console.log(_obj);
       console.log('Query ' + _obj.ok + '!');
       $scope.isQuerySuccess = _obj.ok;
       username = $scope.name;
@@ -108,7 +104,6 @@ angular.module('msgBoard', ['ngMaterial'])
         
       $scope.isRegisterSuccess = false;
       var _obj = JSON.parse(_data);
-      //console.log(_obj);
       console.log('Register ' + _obj.ok + '!');
       $scope.isRegisterSuccess = _obj.ok;
       if ( $scope.isRegisterSuccess ) $scope.showRegisterSuccessToast();
@@ -167,7 +162,6 @@ angular.module('msgBoard', ['ngMaterial'])
   
     // load the user list 
     $scope.loadUsers = function (){
-        console.log("!!!!");
         http_post('/list',"",getList);
         console.log($scope.userlist);
         $scope.users = $scope.userlist;
@@ -193,9 +187,8 @@ angular.module('msgBoard', ['ngMaterial'])
     var msgText= "";
 
     var inputCheck = function ( userInput ) {
-        //console.log($scope.userMood);
+        
         moodValueCheck($scope.userMood);
-        //console.log("user input: " + userInput);
         if(!$scope.isQuerySuccess){
             alert("please login.");
             return false;
@@ -212,7 +205,7 @@ angular.module('msgBoard', ['ngMaterial'])
     }
  
     var userNameCheck = function (){
-        //console.log("username: " + $scope.name);
+        
         if(/^[a-z0-9]{3,10}$/.test($scope.name) && $scope.name!==undefined){
              console.log("valid name!");
              return true;
@@ -222,57 +215,24 @@ angular.module('msgBoard', ['ngMaterial'])
             return false;
         }
     }
+    
     // set button event
     $('#user-login-btn').click(function(){
-        //console.log($scope.userShowOnly);
-        //username = $('#userName').val();
         query_sig($scope.name, $scope.password); 
-        //console.log("username check: " + userNameCheck());
     });
     
     $('#user-register-btn').click(function(){
         register_sig($scope.name, $scope.password);
-        //console.log("nickname: " + $scope.name);
-        //console.log("password: " + $scope.password);
     });
     
     var moodValueCheck = function(mood){
+        
         if(mood == 0) moodValue = "😊";
         else if (mood == 1)  moodValue = "😁";
         else if (mood == 2)  moodValue = "😫";
         else if (mood == 3)  moodValue = "😢";
         else if (mood == 4)  moodValue = "😡";        
         console.log("user's mood is : " + moodValue);    
-    //unknown error QQQQQ 
-     /*
-       console.log($scope.userMood);
-        var m = $scope.userMood;
-        console.log(m);
-       switch (m)
-       {
-            case 1 :
-               moodValue = "😊";
-               break;
-            case 2 :
-               moodValue = "😁";
-               break;
-            case 3 :
-               moodValue = "😫";
-               break;
-            case 4 :
-               moodValue = "😢";
-               break;
-            case 5 :
-               moodValue = "😡";
-               break;
-           //default:
-               //moodValue = "";
-               //console.log("!!");
-               //break;
-       }
-        console.log(moodValue);     
-      */    
     }
     
-
 });
