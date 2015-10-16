@@ -119,7 +119,7 @@ var do_submit = function (send_response, request_body, request_headers) {
   send_response(request_body, {'Content-Type': content_type});
 };
 
-//直接把data.db的東西全部送出去
+//直接把data.db的東西全部送出去fdsafdsafa
 var do_read_all = function(send_response, request_body, request_headers){
   var content_type_default = 'application/octet-stream';
   var content_type = request_headers['content-type'] || content_type_default;
