@@ -1,0 +1,17 @@
+textarea {
+  width: 250px;
+  height: 200px;
+  display: block;
+  font-family: monospace;
+}
+
+.request-zone,
+.response-zone {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#userName{
+  width: 250px;
+  height: 20px;
+}
